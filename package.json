@@ -1,0 +1,37 @@
+{
+  "name": "jssud",
+  "version": "0.0.1",
+  "description": "A pure js text adventure game framework",
+  "main": "src/index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "prettier-check": "node_modules/prettier/bin-prettier.js --check 'src/**/*.js'",
+    "prettier-write": "node_modules/prettier/bin-prettier.js --write 'src/**/*.js'",
+    "doc": "./node_modules/.bin/esdoc src/**/*.js",
+    "debug": "cd examples; node -r esm --inspect demo_1.js;",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "js",
+    "game engine",
+    "text adventure"
+  ],
+  "author": "Francisco Pinchentti",
+  "license": "ISC",
+  "devDependencies": {
+    "esdoc": "^1.1.0",
+    "esdoc-standard-plugin": "^1.0.0",
+    "prettier": "1.16.4"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true
+  },
+  "dependencies": {
+    "esm": "^3.2.9"
+  }
+}
