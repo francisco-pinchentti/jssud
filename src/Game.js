@@ -12,7 +12,7 @@ export class Game {
      * @param {PlayerCharacter} [playerCharacter]
      * @param {string[]} [languages=['en']]
      * @param {string} [currentLanguage='en']
-     * @param {IOHandler} IOHandler
+     * @param {IOHandler} [IOHandler=CLIHandler]
      */
     constructor(
         events = [],
@@ -37,13 +37,14 @@ export class Game {
         this._isRunning = true
         while (this._isRunning) {
             this.printCurrentRoomDescription()
+            let _success = false
 
             const input = await this.IOHandler.read()
-            debugger
             // eval global events:
             for (let i = 0, len = this.events.length; i < len; i++) {
                 if (this.events[i].evaluateOn(this)) {
                     this.events[i].onSuccess(this)
+                    _success = true
                 } else if (ON_FAILURE_ENABLED) {
                     this.events[i].onFailure(this)
                 }
@@ -56,13 +57,27 @@ export class Game {
             for (let i = 0, len = localEvents.length; i < len; i++) {
                 if (localEvents[i].evaluateOn(this)) {
                     localEvents[i].onSuccess(this)
+                    _success = true
                 } else if (ON_FAILURE_ENABLED) {
                     localEvents[i].onFailure(this)
                 }
             }
 
+            if (!_success) {
+                this.printArbitraryMessage(`\tdidn't get that`)
+            }
+
             this._turnCount++
+            this.printArbitraryMessage(`\ton turn ${this._turnCount}`)
         }
+    }
+
+    addItemToPlayerCharacter(item) {
+        return this.playerCharacter.addItem(item)
+    }
+
+    removeItemFromPlayerCharacter(item) {
+        return this.playerCharacter.removeItem(item)
     }
 
     getLastInput() {
@@ -81,7 +96,7 @@ export class Game {
         return this._currentLanguage
     }
 
-    movePlayerToRoom(room) {
+    movePlayerCharacterToRoom(room) {
         this.playerCharacter.moveToRoom(room)
     }
 

@@ -13,6 +13,6 @@ export class LookRoomEvent extends CommandEvent {
             en: ['look', 'l'],
         }
     ) {
-        super(game => game.printCurrentRoomDescription(), undefined, commands)
+        super(game => game.printCurrentRoomDescription(), commands)
     }
 }

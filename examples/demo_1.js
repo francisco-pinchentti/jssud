@@ -19,7 +19,7 @@ const rooms = [
 ]
 
 const g = new Game(events, rooms, 0, null);
-g.movePlayerToRoom(rooms[0]);
+g.movePlayerCharacterToRoom(rooms[0]);
 
 g.run().then( () => {
     console.log('Demo script exit');

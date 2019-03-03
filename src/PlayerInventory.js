@@ -1,4 +1,11 @@
+/**
+ * This class is used to represent the player's character inventory
+ */
 export class PlayerInventory {
+    /**
+     * 
+     * @param {InventoryItem[]} [items=[]]
+     */
     constructor(items = []) {
         this.items = items
     }
@@ -9,9 +16,11 @@ export class PlayerInventory {
 
     addItem(item) {
         this.items.push(item)
+        return this.items.length
     }
 
     removeItem(item) {
         this.items = this.items.filter(it => it === item)
+        return item
     }
 }
