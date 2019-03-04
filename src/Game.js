@@ -107,8 +107,20 @@ export class Game {
         this.IOHandler.print(str.join('\n'))
     }
 
+    /**
+     * 
+     * @param {string} message 
+     */
     printArbitraryMessage(message) {
         this.IOHandler.print(message)
+    }
+
+    /**
+     * 
+     * @param {GameObjectDictionary} messageDict 
+     */
+    printLocalizedMessage(messageDict) {
+        this.IOHandler.print(messageDict.getAsStringForGameCurrentLanguage(this))
     }
 
     quit() {

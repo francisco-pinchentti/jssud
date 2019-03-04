@@ -49,4 +49,9 @@ export class PlayerCharacter {
     getCurrentRoom() {
         return this.currentRoom
     }
+
+    getScore() {
+        return this.score;
+    }
+
 }

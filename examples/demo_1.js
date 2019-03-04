@@ -1,4 +1,5 @@
 import { CommandEvent, Room, Game, QuitGameEvent, LookRoomEvent } from "../src";
+import { ShowScoreEvent } from "../src/ShowScoreEvent";
 
 const events = [
     new CommandEvent(
@@ -8,7 +9,8 @@ const events = [
         }
     ),
     new QuitGameEvent(),
-    new LookRoomEvent()
+    new LookRoomEvent(),
+    new ShowScoreEvent()
 ]
 
 const rooms = [

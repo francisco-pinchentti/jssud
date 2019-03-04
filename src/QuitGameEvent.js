@@ -6,10 +6,13 @@ import { CommandEvent } from './CommandEvent'
  */
 export class QuitGameEvent extends CommandEvent {
     /**
-     *
-     * @param {object} commands
+     * @param {function} [onSuccessCb]
+     * @param {object} [commands]
      */
-    constructor(commands = { en: ['quit', 'q'] }) {
-        super(game => game.quit(), commands)
+    constructor(
+        onSuccessCb = game => game.quit(),
+        commands = { en: ['quit', 'q'] }
+    ) {
+        super(onSuccessCb, commands)
     }
 }

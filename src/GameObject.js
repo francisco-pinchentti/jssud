@@ -20,4 +20,8 @@ export class GameObject {
     getDescriptionForGameCurrentLanguage(game) {
         return this.description.getForGameCurrentLanguage(game)
     }
+
+    getAsStringForGameCurrentLanguage(game, separator) {
+        return this.description.getAsStringForGameCurrentLanguage(game, separator)
+    }
 }
