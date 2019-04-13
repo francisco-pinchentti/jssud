@@ -18,7 +18,7 @@ TODO
 
 ## running examples
 
-We need to add the -r esm flag to neable es6 modules on node:
+We need to add the -r esm flag to enable es6 modules on node:
 
 ```bash
 cd examples

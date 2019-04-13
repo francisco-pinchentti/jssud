@@ -54,4 +54,8 @@ export class PlayerCharacter {
         return this.score;
     }
 
+    addToScore(n) {
+        return this.score += n
+    }
+
 }

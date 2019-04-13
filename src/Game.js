@@ -13,6 +13,7 @@ export class Game {
      * @param {string[]} [languages=['en']]
      * @param {string} [currentLanguage='en']
      * @param {IOHandler} [IOHandler=CLIHandler]
+     * @param {object} [userDefinedVariables]
      */
     constructor(
         events = [],
@@ -21,7 +22,8 @@ export class Game {
         playerCharacter,
         languages = ['en'],
         currentLanguage = 'en',
-        IOHandler
+        IOHandler,
+        userDefinedVariables = {}
     ) {
         this.events = events
         this.rooms = rooms
@@ -31,6 +33,7 @@ export class Game {
         this._turnCount = turnCount
         this._currentLanguage = currentLanguage
         this.IOHandler = IOHandler || new CLIHandler()
+        this.userDefinedVariables = userDefinedVariables
     }
 
     async run() {
@@ -70,6 +73,10 @@ export class Game {
             this._turnCount++
             this.printArbitraryMessage(`\ton turn ${this._turnCount}`)
         }
+    }
+
+    addEvent(event) {
+        return this.events.push(event)
     }
 
     addItemToPlayerCharacter(item) {

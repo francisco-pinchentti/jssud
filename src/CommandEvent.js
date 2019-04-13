@@ -20,6 +20,7 @@ export class CommandEvent extends GameEvent {
     }
 
     evaluateOn(game) {
+        // @todo trim/sanitize input
         return this.commands
             .getForGameCurrentLanguage(game)
             .find(c => c === game.getLastInput())

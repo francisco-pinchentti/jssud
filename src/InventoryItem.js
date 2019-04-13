@@ -9,12 +9,21 @@ export class InventoryItem extends GameObject {
      * @param {function} onUseCb a function like (game) => {} which will be called bound to the receiver instance (the item)
      * @param {string} id
      * @param {GameObjectDictionary} description
-     * @param {number} [pickUpPoints=0]
+     * @param {GameObjectDictionary} name
+     * @param {object} [pickUp]
+     * @param {object} [pickUp.event]
+     * @param {object} [pickUp.event.commands]
+     * @param {object} [pickUp.event.onSuccessCb]
+     * @param {object} [pickUp.event.onFailureCb]
+     * @param {number} [pickUp.points=0]
      */
-    constructor(onUseCb, id, description, pickUpPoints = 0) {
+    constructor(onUseCb, id, description, name, pickUp) {
         super(id, description)
+        this.name = name
         this.onUseCb = onUseCb
-        this.pickUpPoints = pickUpPoints;
+        if (pickUp) {
+            this.pickUpPoints = pickUp.points || 0;
+        }
     }
 
     /**
