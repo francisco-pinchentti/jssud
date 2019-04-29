@@ -6,13 +6,9 @@ import { CommandEvent } from './CommandEvent'
 export class LookRoomEvent extends CommandEvent {
     /**
      *
-     * @param {GameObjectDictionary} commands
+     * @param {object} commands
      */
-    constructor(
-        commands = {
-            en: ['look', 'l'],
-        }
-    ) {
+    constructor(commands = { en: ['look', 'l'] }) {
         super(game => game.printCurrentRoomDescription(), commands)
     }
 }

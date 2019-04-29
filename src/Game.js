@@ -1,36 +1,83 @@
 import { CLIHandler } from './CLIHandler'
 import { PlayerCharacter } from './PlayerCharacter'
+import { GameObjectDictionary } from './GameObjectDictionary'
 
+/**
+ * @constant ON_FAILURE_ENABLED executes onFailureCb for game events on loop
+ * @todo move to a property/config setting
+ */
 const ON_FAILURE_ENABLED = true
+
+/**
+ * @todo review name, location
+ * @constant DEFAULT_CONSTANTS_DICTIONARY
+ */
+const DEFAULT_CONSTANTS_DICTIONARY = {
+    commandError: new GameObjectDictionary({
+        en: ["didn't get that"],
+        es: ['no entiendo eso último'],
+    }),
+    onTurn: new GameObjectDictionary({
+        en: ['\t on turn'],
+        es: ['\t en el turno'],
+    }),
+    onExit: new GameObjectDictionary({
+        en: 'Goodbye',
+        es: 'Adios',
+    }),
+    use: {
+        en: ['use', 'u'],
+        es: ['usar', 'u'],
+    },
+    pickUp: {
+        en: ['take', 'grab', 'pick up'],
+        es: ['coger', 'agarrar', 'tomar'],
+    },
+    look: {
+        en: ['l', 'look', 'examine'],
+        es: ['mirar', 'examinar', 'ver'],
+    },
+}
 
 export class Game {
     /**
      *
-     * @param {GameEvent[]} [events=[]]
-     * @param {Room[]} [rooms=[]]
+     * @param {Array<GameEvent>} [events=[]]
+     * @param {Array<Room>} [rooms=[]]
      * @param {number} [turnCount=0]
      * @param {PlayerCharacter} [playerCharacter]
-     * @param {string[]} [languages=['en']]
      * @param {string} [currentLanguage='en']
      * @param {IOHandler} [IOHandler=CLIHandler]
+     * @param {object} [userDefinedVariables]
+     * @param {object} [constantsDictionary]
      */
     constructor(
         events = [],
         rooms = [],
         turnCount = 0,
         playerCharacter,
-        languages = ['en'],
         currentLanguage = 'en',
-        IOHandler
+        IOHandler,
+        userDefinedVariables = {},
+        constantsDictionary = DEFAULT_CONSTANTS_DICTIONARY
     ) {
         this.events = events
         this.rooms = rooms
         this.playerCharacter = playerCharacter || new PlayerCharacter()
-        this.languages = languages
         this._isRunning = false
         this._turnCount = turnCount
         this._currentLanguage = currentLanguage
         this.IOHandler = IOHandler || new CLIHandler()
+
+        /**
+         * @property {object} userDefinedVariables Holds game domain user defined variables (like custom game flags)
+         */
+        this.userDefinedVariables = userDefinedVariables
+
+        /**
+         * @property {object} constantsDictionary Holds game domain constants (like default messages)
+         */
+        this.constantsDictionary = constantsDictionary
     }
 
     async run() {
@@ -39,37 +86,69 @@ export class Game {
             this.printCurrentRoomDescription()
             let _success = false
 
-            const input = await this.IOHandler.read()
-            // eval global events:
-            for (let i = 0, len = this.events.length; i < len; i++) {
-                if (this.events[i].evaluateOn(this)) {
-                    this.events[i].onSuccess(this)
-                    _success = true
-                } else if (ON_FAILURE_ENABLED) {
-                    this.events[i].onFailure(this)
-                }
-            }
+            await this.readNewInput()
 
-            // eval room events:
-            const localEvents = this.getPlayerCharacter()
-                .getCurrentRoom()
-                .getEvents()
-            for (let i = 0, len = localEvents.length; i < len; i++) {
-                if (localEvents[i].evaluateOn(this)) {
-                    localEvents[i].onSuccess(this)
-                    _success = true
-                } else if (ON_FAILURE_ENABLED) {
-                    localEvents[i].onFailure(this)
-                }
-            }
+            _success = this.evalGlobalEvents()
+            _success = _success || this.evalLocalEvents()
 
             if (!_success) {
-                this.printArbitraryMessage(`\tdidn't get that`)
+                this.printArbitraryMessage(
+                    this.getValueFromConstantsDictionary(
+                        'commandError'
+                    ).getAsStringForGameCurrentLanguage(this)
+                )
             }
 
             this._turnCount++
-            this.printArbitraryMessage(`\ton turn ${this._turnCount}`)
+            this.printArbitraryMessage(
+                `${this.getValueFromConstantsDictionary(
+                    'onTurn'
+                ).getAsStringForGameCurrentLanguage(this)} ${this._turnCount}`
+            )
         }
+    }
+
+    /**
+     * @returns {boolean} true if at least one event ocurred, false otehrwise
+     */
+    evalGlobalEvents() {
+        let result = false
+        this.events.forEach(evt => {
+            if (evt.evaluateOn(this)) {
+                evt.onSuccess(this)
+                result = true
+            } else if (ON_FAILURE_ENABLED) {
+                evt.onFailure(this)
+            }
+        })
+        return result
+    }
+
+    /**
+     * @returns {boolean} true if at least one event ocurred, false otehrwise
+     */
+    evalLocalEvents() {
+        let result = false
+        const localEvents = this.getPlayerCharacter()
+            .getCurrentRoom()
+            .getEvents()
+        localEvents.forEach(evt => {
+            if (evt.evaluateOn(this)) {
+                evt.onSuccess(this)
+                result = true
+            } else if (ON_FAILURE_ENABLED) {
+                evt.onFailure(this)
+            }
+        })
+        return result
+    }
+
+    addEvent(event) {
+        return this.events.push(event)
+    }
+
+    addRoom(room) {
+        this.rooms.push(room)
     }
 
     addItemToPlayerCharacter(item) {
@@ -84,7 +163,7 @@ export class Game {
         return this.IOHandler.getLastInput()
     }
 
-    readNewInput() {
+    async readNewInput() {
         return this.IOHandler.read()
     }
 
@@ -96,35 +175,129 @@ export class Game {
         return this._currentLanguage
     }
 
+    setCurrentLanguage(lang) {
+        // @todo validate among list of languages
+        this._currentLanguage = lang
+    }
+
     movePlayerCharacterToRoom(room) {
         this.playerCharacter.moveToRoom(room)
     }
 
     printCurrentRoomDescription() {
-        const str = this.getPlayerCharacter()
-            .getCurrentRoom()
-            .getDescriptionForGameCurrentLanguage(this)
-        this.IOHandler.print(str.join('\n'))
+        const currentRoom = this.getPlayerCharacter().getCurrentRoom()
+        this.IOHandler.print(
+            currentRoom.getDescriptionForGameCurrentLanguage(this).join('\n')
+        )
+        if (currentRoom.hasItems()) {
+            this.IOHandler.print(
+                currentRoom.getItemsNamesForGameCurrentLanguage(this).join('\n')
+            )
+        }
     }
 
     /**
-     * 
-     * @param {string} message 
+     *
+     * @param {string} message
      */
     printArbitraryMessage(message) {
         this.IOHandler.print(message)
     }
 
     /**
-     * 
-     * @param {GameObjectDictionary} messageDict 
+     *
+     * @param {GameObjectDictionary} messageDict
      */
     printLocalizedMessage(messageDict) {
-        this.IOHandler.print(messageDict.getAsStringForGameCurrentLanguage(this))
+        this.IOHandler.print(
+            messageDict.getAsStringForGameCurrentLanguage(this)
+        )
     }
 
     quit() {
         this.printArbitraryMessage('Goodbye!')
         this._isRunning = false
+    }
+
+    load(filename) {
+        this._isRunning = false
+        const data = this.IOHandler.load(filename)
+        // @todo back to initial state
+        // @see https://lodash.com/docs#cloneDeep
+        // @todo reset events
+        // @todo reset rooms
+        // @todo reset player score, items...
+        // @todo move player to initial room
+        // @todo load initial userDefinedVariables
+        data.inputs.forEach(i => {
+            this.IOHandler.feedInput(i)
+            this.evalGlobalEvents()
+            this.evalLocalEvents()
+        })
+        this.turnCount = data.turnCount
+        this._isRunning = true
+    }
+
+    save(filename) {
+        const ommitedInputs = this.getNonPersistableInputs()
+        this.IOHandler.save(filename, {
+            ommitedInputs,
+        })
+    }
+
+    /**
+     *
+     * @param {string} key
+     * @returns {object}
+     */
+    getUserDefinedVariableFor(key) {
+        return this.userDefinedVariables[key]
+    }
+
+    /**
+     *
+     * @param {string} key
+     * @param {object} value
+     */
+    setValueForUserDefinedVariable(key, value) {
+        this.userDefinedVariables[key] = value
+    }
+
+    /**
+     * @param {string} key
+     * @returns {object}
+     */
+    getValueFromConstantsDictionary(key) {
+        return this.constantsDictionary[key]
+    }
+
+    /**
+     * @param {string} key
+     * @param {object} value
+     */
+    setConstantsDictionaryValueFor(key) {
+        this.constantsDictionary[key] = value
+    }
+
+    /**
+     *
+     * @param {string} key a valid property of constantsDictionary
+     * @returns {object}
+     */
+    getLocalizedValueFromConstantsDictionary(key) {
+        return this.getValueFromConstantsDictionary(key)[
+            this.getCurrentLanguage()
+        ]
+    }
+
+    getNonPersistableEvents() {
+        return this.events.filter(e => e.avoidPersist)
+    }
+
+    getNonPersistableInputs() {
+        return this.getNonPersistableEvents().reduce(
+            (acc, ev) => acc.concat(ev.commands.getAsFlatArray()),
+            []
+        )
     }
 }

@@ -1,15 +1,25 @@
-import { GameObject } from './GameObject'
+import { GameObject } from '../GameObject'
 
 /**
  * @abstract
  */
 export class GameEvent extends GameObject {
+    /**
+     * @param {function} onSuccessCb
+     * @param {string} [id]
+     * @param {GameObjectDictionary} [description]
+     * @param {function} [onFailureCb]
+     */
     constructor(onSuccessCb, id, description, onFailureCb) {
         super(id, description)
         this.onSuccessCb = onSuccessCb
         this.onFailureCb = onFailureCb
     }
 
+    /**
+     * @abstract
+     * @param {Game} game
+     */
     evaluateOn(game) {}
 
     onSuccess(game) {

@@ -3,8 +3,8 @@
  */
 export class PlayerInventory {
     /**
-     * 
-     * @param {InventoryItem[]} [items=[]]
+     *
+     * @param {Array<InventoryItem>} [items=[]]
      */
     constructor(items = []) {
         this.items = items

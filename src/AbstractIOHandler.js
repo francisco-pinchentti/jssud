@@ -8,11 +8,15 @@ export class AbstractIOHandler {
 
     /**
      * @abstract
+     * @returns {Promise}
      */
     read() {}
 
+    feedInput(input) {
+        this.inputs.push(input)
+    }
+
     getLastInput() {
-        // return this.getInputAt[this.inputs.length - 1]
         return this.inputs[this.inputs.length - 1]
     }
 
@@ -24,4 +28,19 @@ export class AbstractIOHandler {
      * @abstract
      */
     print() {}
+
+    /**
+     *
+     * @abstract
+     * @param {string} filename
+     * @param {object} [opts]
+     */
+    load(filename, opts) {}
+
+    /**
+     * @abstract
+     * @param {string} filename
+     * @param {object} [opts]
+     */
+    save(filename, opts) {}
 }

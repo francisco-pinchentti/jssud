@@ -1,19 +1,13 @@
 import { PlayerInventory } from './PlayerInventory'
 
 export class PlayerCharacter {
-
     /**
      * @param {string} [name='player']
      * @param {number} [score=0]
      * @param {PlayerInventory} [inventory]
      * @param {Room} [currentRoom]
      */
-    constructor(
-        name = 'player',
-        score = 0,
-        inventory,
-        currentRoom
-    ) {
+    constructor(name = 'player', score = 0, inventory, currentRoom) {
         this.name = name
         this.score = score
         this.inventory = inventory || new PlayerInventory()
@@ -25,10 +19,7 @@ export class PlayerCharacter {
     }
 
     addItem(item) {
-        this.inventory.addItem(item);
-        if (item.pickUpPoints) {
-            this.score += item.pickUpPoints
-        }
+        this.inventory.addItem(item)
     }
 
     hasItem(item) {
@@ -51,7 +42,10 @@ export class PlayerCharacter {
     }
 
     getScore() {
-        return this.score;
+        return this.score
     }
 
+    addToScore(n) {
+        return (this.score += n)
+    }
 }

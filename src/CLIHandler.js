@@ -1,4 +1,5 @@
 const readline = require('readline')
+const fs = require('fs')
 import { AbstractIOHandler } from './AbstractIOHandler'
 
 /**
@@ -17,8 +18,7 @@ export class CLIHandler extends AbstractIOHandler {
     read() {
         return new Promise((resolve, reject) => {
             this.rl.question('>', answer => {
-                debugger
-                this.inputs.push(answer)
+                this.feedInput(answer)
                 resolve(answer)
             })
         })
@@ -26,5 +26,34 @@ export class CLIHandler extends AbstractIOHandler {
 
     print(output = '') {
         console.log(output)
+    }
+
+    load(filename) {
+        try {
+            const data = fs.readFileSync(filename)
+            return JSON.parse(data)
+        } catch (e) {
+            return false
+        }
+    }
+
+    save(filename, opts) {
+        let inputs = this.inputs
+        if (opts && opts.ommitedInputs && opts.ommitedInputs.length) {
+            inputs = this.inputs.filter(
+                i => !opts.ommitedInputs.find(o => i === o)
+            )
+        }
+        const data = JSON.stringify({
+            language: '',
+            options: '',
+            inputs,
+        })
+        try {
+            fs.writeFileSync(filename, data)
+            return true
+        } catch (e) {
+            return false
+        }
     }
 }

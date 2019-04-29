@@ -7,10 +7,10 @@
     "example": "examples"
   },
   "scripts": {
-    "prettier-check": "node_modules/prettier/bin-prettier.js --check 'src/**/*.js'",
-    "prettier-write": "node_modules/prettier/bin-prettier.js --write 'src/**/*.js'",
+    "prettier-check": "node_modules/prettier/bin-prettier.js --check README.md 'src/**/*.js'",
+    "prettier-write": "node_modules/prettier/bin-prettier.js --write README.md 'src/**/*.js'",
     "doc": "./node_modules/.bin/esdoc src/**/*.js",
-    "debug": "cd examples; node -r esm --inspect demo_1.js;",
+    "debug": "cd examples; node -r esm --inspect demo_1_basics.js;",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -29,7 +29,8 @@
     "trailingComma": "es5",
     "tabWidth": 4,
     "semi": false,
-    "singleQuote": true
+    "singleQuote": true,
+    "endOfLine": "lf"
   },
   "dependencies": {
     "esm": "^3.2.9"

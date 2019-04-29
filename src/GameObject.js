@@ -2,6 +2,7 @@ import { GameObjectDictionary } from './GameObjectDictionary'
 
 /**
  * @abstract
+ * Base class to extend when representing game elements such as events, items, the player, etc
  */
 export class GameObject {
     constructor(id, description) {
@@ -22,6 +23,9 @@ export class GameObject {
     }
 
     getAsStringForGameCurrentLanguage(game, separator) {
-        return this.description.getAsStringForGameCurrentLanguage(game, separator)
+        return this.description.getAsStringForGameCurrentLanguage(
+            game,
+            separator
+        )
     }
 }
