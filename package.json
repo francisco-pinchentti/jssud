@@ -7,8 +7,8 @@
     "example": "examples"
   },
   "scripts": {
-    "prettier-check": "node_modules/prettier/bin-prettier.js --check README.md 'src/**/*.js'",
-    "prettier-write": "node_modules/prettier/bin-prettier.js --write README.md 'src/**/*.js'",
+    "prettier-check": "node_modules/prettier/bin-prettier.js --check README.md 'src/**/*.js' 'examples/**/*.js'",
+    "prettier-write": "node_modules/prettier/bin-prettier.js --write README.md 'src/**/*.js' 'examples/**/*.js'",
     "doc": "./node_modules/.bin/esdoc src/**/*.js",
     "debug": "cd examples; node -r esm --inspect demo_1_basics.js;",
     "test": "echo \"Error: no test specified\" && exit 1"

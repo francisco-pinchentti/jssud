@@ -10,7 +10,7 @@ export class LoadGameEvent extends CommandEvent {
      */
     constructor(commands = { en: ['load'] }, filename = 'savegame.dat') {
         super(game => {
-            game.load(this.filename)
+            game.onLoad(this.filename)
         }, commands)
         this.filename = filename
 

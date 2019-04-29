@@ -81,6 +81,7 @@ export class Game {
     }
 
     async run() {
+        // return new Promise( (resolve, reject) => {
         this._isRunning = true
         while (this._isRunning) {
             this.printCurrentRoomDescription()
@@ -105,6 +106,20 @@ export class Game {
                     'onTurn'
                 ).getAsStringForGameCurrentLanguage(this)} ${this._turnCount}`
             )
+        }
+
+        /*
+        resolve({
+            lastInput: this.getLastInput(),
+            language: this._currentLanguage,
+            turnCount: this._turnCount,
+        })
+     });
+     */
+        return {
+            lastInput: this.getLastInput(),
+            language: this._currentLanguage,
+            turnCount: this._turnCount,
         }
     }
 
@@ -219,8 +234,11 @@ export class Game {
         this._isRunning = false
     }
 
-    load(filename) {
+    onLoad(filename) {
         this._isRunning = false
+    }
+
+    doLoad(filename) {
         const data = this.IOHandler.load(filename)
         // @todo back to initial state
         // @see https://lodash.com/docs#cloneDeep
