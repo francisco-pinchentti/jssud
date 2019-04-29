@@ -94,20 +94,25 @@ function runDemo(inputs) {
         g.feedInputs(inputs)
     }
 
-    g.run().then(intent => {
-        // @todo parse intent for load/save/pause
-        console.log(`<DEBUG> ${JSON.stringify(intent)}`)
+    return g.run()
+}
+
+async function run() {
+    let inputs = []
+    let stop = false
+    do {
+        const intent = await runDemo(inputs)
         if (intent.lastInput === 'load') {
             console.log(
                 '<DEBUG> Load initial state, load json, and then feed input'
             )
-            runDemo()
+            inputs = []
+        } else if (intent.lastInput === 'quit') {
+            stop = true
         }
-        if (intent.lastInput === 'quit') {
-            console.log('<DEBUG> Demo script exit')
-            process.exit(0)
-        }
-    })
+    } while (!stop)
+    console.log('<DEBUG> Demo script exit')
+    process.exit(0)
 }
 
-runDemo()
+run()

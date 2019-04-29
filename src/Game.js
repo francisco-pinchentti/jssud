@@ -234,6 +234,10 @@ export class Game {
         this._isRunning = false
     }
 
+    feedInputs(inputs) {
+        // @todo
+    }
+
     onLoad(filename) {
         this._isRunning = false
     }
