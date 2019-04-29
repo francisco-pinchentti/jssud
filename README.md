@@ -1,5 +1,4 @@
-README.md
-=========
+# README.md
 
 ## about
 
@@ -7,10 +6,10 @@ A pure js text adventure game framework
 
 ## project structure
 
-* examples/
-    * ...
-* src/
-    * main framework source code directory
+-   examples/
+    -   ...
+-   src/
+    -   main framework source code directory
 
 ## a little history
 
