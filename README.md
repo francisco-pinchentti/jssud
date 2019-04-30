@@ -7,7 +7,7 @@ A pure js text adventure game framework
 ## project structure
 
 -   examples/
-    -   ...
+    -   mini games to test out the framework
 -   src/
     -   main framework source code directory
 
@@ -24,3 +24,13 @@ We need to add the -r esm flag to enable es6 modules on node (BTW I'm using node
 cd examples
 node -r esm <example filename>
 ```
+
+## generating documentation
+
+Enter
+
+```bash
+npm run doc
+```
+
+to run esdoc and generate documentation on docs/ directory.

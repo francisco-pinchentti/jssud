@@ -1,4 +1,4 @@
-import { Room, Game, InventoryItem } from '../src'
+import { Room, Game, GameEngine, InventoryItem } from '../src'
 import {
     CommandEvent,
     SaveGameEvent,
@@ -16,6 +16,11 @@ import {
  *  - initialization
  */
 
+/**
+ * Creates a new Game instance
+ *
+ * @returns {Game} a new game object
+ */
 function initializeNewGame() {
     const events = [
         new CommandEvent(
@@ -59,16 +64,20 @@ function initializeNewGame() {
 
     const keyItem = new InventoryItem(
         game => {
-            game.printArbitraryMessage('You open the door to the north...')
             // looking for an event using it's id:
             const lockedRoomEvent = rooms[0]
                 .getEvents()
                 .find(evt => evt.id === 'ce002')
-            rooms[0].removeEvent(lockedRoomEvent)
-            // an event onSuccess may be used to create another:
-            rooms[0].addDestination(rooms[1], {
-                en: ['go north'],
-            })
+            if (lockedRoomEvent) {
+                game.printArbitraryMessage('You open the door to the north...')
+                rooms[0].removeEvent(lockedRoomEvent)
+                // an event onSuccess may be used to create another:
+                rooms[0].addDestination(rooms[1], {
+                    en: ['go north'],
+                })
+            } else {
+                game.printArbitraryMessage("it seems it can't be used here...")
+            }
         },
         'it001',
         {
@@ -82,37 +91,13 @@ function initializeNewGame() {
 
     rooms[0].addItem(keyItem)
 
-    let g = new Game(events, rooms, 0, null)
+    let g = new Game(events, rooms)
     g.movePlayerCharacterToRoom(rooms[0])
     return g
 }
 
-function runDemo(inputs) {
-    var g = initializeNewGame()
-
-    if (inputs) {
-        g.feedInputs(inputs)
-    }
-
-    return g.run()
-}
-
-async function run() {
-    let inputs = []
-    let stop = false
-    do {
-        const intent = await runDemo(inputs)
-        if (intent.lastInput === 'load') {
-            console.log(
-                '<DEBUG> Load initial state, load json, and then feed input'
-            )
-            inputs = []
-        } else if (intent.lastInput === 'quit') {
-            stop = true
-        }
-    } while (!stop)
-    console.log('<DEBUG> Demo script exit')
+const ge = new GameEngine(initializeNewGame)
+ge.run().then(result => {
+    console.log(`<DEBUG> Demo script exit ${result}`)
     process.exit(0)
-}
-
-run()
+})

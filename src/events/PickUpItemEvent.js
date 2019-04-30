@@ -1,4 +1,4 @@
-import { verbsNounMapping } from './TextUtils'
+import { verbsNounMapping } from '../utils/TextUtils'
 import { GameEvent } from './GameEvent'
 import { UseItemEvent } from './UseItemEvent'
 import { LookItemEvent } from './LookItemEvent'

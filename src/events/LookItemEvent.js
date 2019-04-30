@@ -1,5 +1,5 @@
 import { GameEvent } from './GameEvent'
-import { verbsNounMapping } from './TextUtils'
+import { verbsNounMapping } from '../utils/TextUtils'
 
 /**
  * @extends GameEvent

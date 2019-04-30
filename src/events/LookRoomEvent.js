@@ -9,6 +9,6 @@ export class LookRoomEvent extends CommandEvent {
      * @param {object} commands
      */
     constructor(commands = { en: ['look', 'l'] }) {
-        super(game => game.printCurrentRoomDescription(), commands)
+        super(game => game.printCurrentRoomDetails(), commands)
     }
 }

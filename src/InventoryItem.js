@@ -19,14 +19,14 @@ export class InventoryItem extends GameObject {
         id,
         description,
         name,
-        pickUpPoints,
+        pickUpPoints = 0,
         onLookCb,
         onPickUpCb
     ) {
         super(id, description)
         this.name = new GameObjectDictionary(name)
         this.onUseCb = onUseCb
-        this.pickUpPoints = pickUpPoints || 0
+        this.pickUpPoints = pickUpPoints
         this.onLookCb = onLookCb
         this.onPickUpCb = onPickUpCb
     }

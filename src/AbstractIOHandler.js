@@ -1,8 +1,13 @@
 /**
+ * Game objects should delegate all I/O operations on AbstractIOHandler subclasses
+ *
  * @abstract
  */
 export class AbstractIOHandler {
     constructor(inputs = []) {
+        /**
+         * @property {Array<string>} inputs History of commands entered by user
+         */
         this.inputs = inputs
     }
 
@@ -11,6 +16,11 @@ export class AbstractIOHandler {
      * @returns {Promise}
      */
     read() {}
+
+    /**
+     * @abstract
+     */
+    clearOutputArea() {}
 
     feedInput(input) {
         this.inputs.push(input)
@@ -43,4 +53,9 @@ export class AbstractIOHandler {
      * @param {object} [opts]
      */
     save(filename, opts) {}
+
+    /**
+     * @abstract
+     */
+    onGameDestroy() {}
 }

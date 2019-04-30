@@ -1,6 +1,7 @@
 export { AbstractIOHandler } from './AbstractIOHandler'
 export { CLIHandler } from './CLIHandler'
 export { Game } from './Game'
+export { GameEngine } from './GameEngine'
 export { GameObject } from './GameObject'
 export { GameObjectDictionary } from './GameObjectDictionary'
 export { InventoryItem } from './InventoryItem'

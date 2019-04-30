@@ -57,15 +57,17 @@ const rooms = [
 
 const keyItem = new InventoryItem(
     game => {
-        game.printArbitraryMessage('You open the door to the north...')
         const lockedRoomEvent = rooms[0]
             .getEvents()
             .find(evt => evt.id === 'ce002')
-        rooms[0].removeEvent(lockedRoomEvent)
-        rooms[0].addDestination(rooms[1], {
-            en: ['go north', 'north', 'n'],
-            es: ['ir al norte', 'norte', 'n'],
-        })
+        if (lockedRoomEvent) {
+            game.printArbitraryMessage('You open the door to the north...')
+            rooms[0].removeEvent(lockedRoomEvent)
+            rooms[0].addDestination(rooms[1], {
+                en: ['go north', 'north', 'n'],
+                es: ['ir al norte', 'norte', 'n'],
+            })
+        }
     },
     'it001',
     {
@@ -81,7 +83,7 @@ const keyItem = new InventoryItem(
 
 rooms[0].addItem(keyItem)
 
-const g = new Game(events, rooms, 0, null)
+const g = new Game(events, rooms)
 g.movePlayerCharacterToRoom(rooms[0])
 
 g.run().then(() => {

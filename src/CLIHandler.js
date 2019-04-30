@@ -3,7 +3,7 @@ const fs = require('fs')
 import { AbstractIOHandler } from './AbstractIOHandler'
 
 /**
- * An IOHandler that's designed to use the CLI
+ * An IOHandler that's designed to use the NodeJS CLI
  */
 export class CLIHandler extends AbstractIOHandler {
     constructor(inputs = []) {
@@ -15,19 +15,36 @@ export class CLIHandler extends AbstractIOHandler {
         })
     }
 
-    read() {
+    /**
+     *
+     * @param {string} [promptMessage='> ']
+     */
+    read(promptMessage = '> ') {
         return new Promise((resolve, reject) => {
-            this.rl.question('>', answer => {
+            this.rl.question(promptMessage, answer => {
                 this.feedInput(answer)
                 resolve(answer)
             })
         })
     }
 
+    /**
+     *
+     * @param {string} output
+     */
     print(output = '') {
         console.log(output)
     }
 
+    clearOutputArea() {
+        readline.cursorTo(process.stdout, 0, 0)
+        readline.clearScreenDown(process.stdout)
+    }
+
+    /**
+     *
+     * @param {string} filename
+     */
     load(filename) {
         try {
             const data = fs.readFileSync(filename)
@@ -37,16 +54,26 @@ export class CLIHandler extends AbstractIOHandler {
         }
     }
 
+    /**
+     *
+     * @param {string} filename
+     * @param {object} opts
+     */
     save(filename, opts) {
+        if (!opts) {
+            throw new Error('Missing required argument: opts')
+        }
+
         let inputs = this.inputs
-        if (opts && opts.ommitedInputs && opts.ommitedInputs.length) {
+        if (opts.ommitedInputs && opts.ommitedInputs.length) {
             inputs = this.inputs.filter(
                 i => !opts.ommitedInputs.find(o => i === o)
             )
         }
         const data = JSON.stringify({
-            language: '',
-            options: '',
+            language: opts.language,
+            turnCount: opts.turnCount,
+            gameSettings: opts.gameSettings,
             inputs,
         })
         try {
@@ -55,5 +82,9 @@ export class CLIHandler extends AbstractIOHandler {
         } catch (e) {
             return false
         }
+    }
+
+    onGameDestroy() {
+        this.rl.close()
     }
 }

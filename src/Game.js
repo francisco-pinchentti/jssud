@@ -1,12 +1,7 @@
 import { CLIHandler } from './CLIHandler'
 import { PlayerCharacter } from './PlayerCharacter'
 import { GameObjectDictionary } from './GameObjectDictionary'
-
-/**
- * @constant ON_FAILURE_ENABLED executes onFailureCb for game events on loop
- * @todo move to a property/config setting
- */
-const ON_FAILURE_ENABLED = true
+const uuidv4 = require('uuid/v4')
 
 /**
  * @todo review name, location
@@ -17,14 +12,24 @@ const DEFAULT_CONSTANTS_DICTIONARY = {
         en: ["didn't get that"],
         es: ['no entiendo eso último'],
     }),
+    // post basic events callback execution messages:
     onTurn: new GameObjectDictionary({
         en: ['\t on turn'],
         es: ['\t en el turno'],
     }),
     onExit: new GameObjectDictionary({
-        en: 'Goodbye',
-        es: 'Adios',
+        en: ['Goodbye\n'],
+        es: ['Adios\n'],
     }),
+    onLookRoom: new GameObjectDictionary({
+        en: ['here you see'],
+        es: ['aquí puedes ver'],
+    }),
+    onLoad: new GameObjectDictionary({
+        en: ['welcome back'],
+        es: ['bienvenido nuevamente'],
+    }),
+    // basic commands dictionaries:
     use: {
         en: ['use', 'u'],
         es: ['usar', 'u'],
@@ -44,8 +49,7 @@ export class Game {
      *
      * @param {Array<GameEvent>} [events=[]]
      * @param {Array<Room>} [rooms=[]]
-     * @param {number} [turnCount=0]
-     * @param {PlayerCharacter} [playerCharacter]
+     * @param {Array<string>} [availableLanguages=['en']]
      * @param {string} [currentLanguage='en']
      * @param {IOHandler} [IOHandler=CLIHandler]
      * @param {object} [userDefinedVariables]
@@ -54,20 +58,30 @@ export class Game {
     constructor(
         events = [],
         rooms = [],
-        turnCount = 0,
-        playerCharacter,
+        availableLanguages = ['en'],
         currentLanguage = 'en',
-        IOHandler,
+        IOHandler = new CLIHandler(),
         userDefinedVariables = {},
         constantsDictionary = DEFAULT_CONSTANTS_DICTIONARY
     ) {
+        /**
+         * @property {Array<GameEvent>} events
+         */
         this.events = events
+        /**
+         * @property {Array<Rooms>} rooms
+         */
         this.rooms = rooms
-        this.playerCharacter = playerCharacter || new PlayerCharacter()
+        this.playerCharacter = new PlayerCharacter()
         this._isRunning = false
-        this._turnCount = turnCount
+        this._turnCount = 0
+        this._availableLanguages = availableLanguages
         this._currentLanguage = currentLanguage
-        this.IOHandler = IOHandler || new CLIHandler()
+
+        /**
+         * @property {Object<AbstractIOHandler>} IOHandler where game I/O is delegated
+         */
+        this.IOHandler = IOHandler
 
         /**
          * @property {object} userDefinedVariables Holds game domain user defined variables (like custom game flags)
@@ -78,13 +92,33 @@ export class Game {
          * @property {object} constantsDictionary Holds game domain constants (like default messages)
          */
         this.constantsDictionary = constantsDictionary
+
+        /**
+         * @property {string} _id useful for debugging purpouses
+         */
+        this._id = uuidv4()
+
+        /**
+         * @property {object} _intent will be used when game loop is stopped, paused, etc
+         */
+        this._intent = null
+
+        /**
+         * @property {boolean} _onFailureCbEnabled executes onFailureCb for game events on loop
+         */
+        this._onFailureCbEnabled = true
+
+        /**
+         * @property {boolean} _hideOutput print() calls will be no-op when this flag is true
+         */
+        this._hideOutput = true
     }
 
     async run() {
-        // return new Promise( (resolve, reject) => {
         this._isRunning = true
+        this._hideOutput = false
         while (this._isRunning) {
-            this.printCurrentRoomDescription()
+            this.printCurrentRoomSummary()
             let _success = false
 
             await this.readNewInput()
@@ -108,19 +142,9 @@ export class Game {
             )
         }
 
-        /*
-        resolve({
-            lastInput: this.getLastInput(),
-            language: this._currentLanguage,
-            turnCount: this._turnCount,
-        })
-     });
-     */
-        return {
-            lastInput: this.getLastInput(),
-            language: this._currentLanguage,
-            turnCount: this._turnCount,
-        }
+        this.IOHandler.onGameDestroy()
+
+        return this._intent
     }
 
     /**
@@ -132,7 +156,7 @@ export class Game {
             if (evt.evaluateOn(this)) {
                 evt.onSuccess(this)
                 result = true
-            } else if (ON_FAILURE_ENABLED) {
+            } else if (this._onFailureCbEnabled) {
                 evt.onFailure(this)
             }
         })
@@ -151,7 +175,7 @@ export class Game {
             if (evt.evaluateOn(this)) {
                 evt.onSuccess(this)
                 result = true
-            } else if (ON_FAILURE_ENABLED) {
+            } else if (this._onFailureCbEnabled) {
                 evt.onFailure(this)
             }
         })
@@ -179,7 +203,7 @@ export class Game {
     }
 
     async readNewInput() {
-        return this.IOHandler.read()
+        return this.IOHandler.read(`<${this._id}>  <====== `)
     }
 
     getPlayerCharacter() {
@@ -191,7 +215,9 @@ export class Game {
     }
 
     setCurrentLanguage(lang) {
-        // @todo validate among list of languages
+        if (!this._availableLanguages.includes(lang)) {
+            throw new Error(`Invalid language code supplied: ${lang}`)
+        }
         this._currentLanguage = lang
     }
 
@@ -199,13 +225,37 @@ export class Game {
         this.playerCharacter.moveToRoom(room)
     }
 
-    printCurrentRoomDescription() {
+    /**
+     *
+     * @param {string} message
+     */
+    _print(message) {
+        if (!this._hideOutput) {
+            this.IOHandler.print(`<${this._id}>\t\t${message}`)
+        }
+    }
+
+    /**
+     * Prints current room description
+     */
+    printCurrentRoomSummary() {
         const currentRoom = this.getPlayerCharacter().getCurrentRoom()
-        this.IOHandler.print(
+        this._print(
             currentRoom.getDescriptionForGameCurrentLanguage(this).join('\n')
         )
+    }
+
+    /**
+     * Prints current room content
+     */
+    printCurrentRoomDetails() {
+        const currentRoom = this.getPlayerCharacter().getCurrentRoom()
         if (currentRoom.hasItems()) {
-            this.IOHandler.print(
+            const message = this.getValueFromConstantsDictionary(
+                'onLookRoom'
+            ).getAsStringForGameCurrentLanguage(this)
+            this._print(message)
+            this._print(
                 currentRoom.getItemsNamesForGameCurrentLanguage(this).join('\n')
             )
         }
@@ -216,7 +266,7 @@ export class Game {
      * @param {string} message
      */
     printArbitraryMessage(message) {
-        this.IOHandler.print(message)
+        this._print(message)
     }
 
     /**
@@ -224,45 +274,72 @@ export class Game {
      * @param {GameObjectDictionary} messageDict
      */
     printLocalizedMessage(messageDict) {
-        this.IOHandler.print(
-            messageDict.getAsStringForGameCurrentLanguage(this)
-        )
+        this._print(messageDict.getAsStringForGameCurrentLanguage(this))
+    }
+
+    /**
+     * When game main loop stops the run method will return an object describing what happened
+     * @returns {object}
+     */
+    _createExitIntent() {
+        return {
+            id: this._id,
+            lastInput: this.getLastInput(),
+            language: this._currentLanguage,
+            turnCount: this._turnCount,
+        }
     }
 
     quit() {
-        this.printArbitraryMessage('Goodbye!')
+        const message = this.getValueFromConstantsDictionary(
+            'onExit'
+        ).getAsStringForGameCurrentLanguage(this)
+        this.printArbitraryMessage(message)
         this._isRunning = false
-    }
-
-    feedInputs(inputs) {
-        // @todo
+        this._intent = Object.assign(
+            {},
+            {
+                quit: true,
+            }
+        )
     }
 
     onLoad(filename) {
         this._isRunning = false
+        this._intent = Object.assign(
+            {},
+            {
+                load: true,
+                filenameToLoad: filename,
+            }
+        )
     }
 
     doLoad(filename) {
         const data = this.IOHandler.load(filename)
-        // @todo back to initial state
-        // @see https://lodash.com/docs#cloneDeep
-        // @todo reset events
-        // @todo reset rooms
-        // @todo reset player score, items...
-        // @todo move player to initial room
-        // @todo load initial userDefinedVariables
-        data.inputs.forEach(i => {
-            this.IOHandler.feedInput(i)
-            this.evalGlobalEvents()
-            this.evalLocalEvents()
-        })
-        this.turnCount = data.turnCount
-        this._isRunning = true
+        this._hideOutput = true
+        if (data.inputs && data.inputs.length) {
+            data.inputs.forEach(i => {
+                this.IOHandler.feedInput(i)
+                this.evalGlobalEvents()
+                this.evalLocalEvents()
+            })
+        }
+        this._turnCount = data.turnCount
+        this.IOHandler.clearOutputArea()
+        this._hideOutput = false
+        const message = this.getValueFromConstantsDictionary(
+            'onLoad'
+        ).getAsStringForGameCurrentLanguage(this)
+        this.printArbitraryMessage(message)
     }
 
     save(filename) {
         const ommitedInputs = this.getNonPersistableInputs()
         this.IOHandler.save(filename, {
+            turnCount: this._turnCount,
+            language: this._currentLanguage,
+            gameSettings: {},
             ommitedInputs,
         })
     }
@@ -297,7 +374,7 @@ export class Game {
      * @param {string} key
      * @param {object} value
      */
-    setConstantsDictionaryValueFor(key) {
+    setConstantsDictionaryValueFor(key, value) {
         this.constantsDictionary[key] = value
     }
 
@@ -316,6 +393,9 @@ export class Game {
         return this.events.filter(e => e.avoidPersist)
     }
 
+    /**
+     * @see: this could be moved inside CLIHandler
+     */
     getNonPersistableInputs() {
         return this.getNonPersistableEvents().reduce(
             (acc, ev) => acc.concat(ev.commands.getAsFlatArray()),

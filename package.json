@@ -1,6 +1,6 @@
 {
   "name": "jssud",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A pure js text adventure game framework",
   "main": "src/index.js",
   "directories": {
@@ -19,7 +19,7 @@
     "text adventure"
   ],
   "author": "Francisco Pinchentti",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "esdoc": "^1.1.0",
     "esdoc-standard-plugin": "^1.0.0",
@@ -33,6 +33,7 @@
     "endOfLine": "lf"
   },
   "dependencies": {
-    "esm": "^3.2.9"
+    "esm": "^3.2.9",
+    "uuid": "^3.3.2"
   }
 }
