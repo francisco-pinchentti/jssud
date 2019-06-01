@@ -1,4 +1,4 @@
-import { GameObjectDictionary } from '../GameObjectDictionary'
+import { GameTextDictionary } from '../text/GameTextDictionary'
 import { GameEvent } from './GameEvent'
 
 /**
@@ -9,14 +9,14 @@ export class CommandEvent extends GameEvent {
     /**
      *
      * @param {function} onSuccessCb
-     * @param {GameObjectDictionary} commands
+     * @param {GameTextDictionary} commands
      * @param {string} [id]
-     * @param {GameObjectDictionary} [description]
+     * @param {GameTextDictionary} [description]
      * @param {function} [onFailureCb]
      */
     constructor(onSuccessCb, commands, id, description, onFailureCb) {
         super(onSuccessCb, id, description, onFailureCb)
-        this.commands = new GameObjectDictionary(commands)
+        this.commands = new GameTextDictionary(commands)
     }
 
     evaluateOn(game) {

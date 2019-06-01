@@ -4,7 +4,7 @@
  *  - it is created with a plain js object in the form of { 'lang-code-1': string[], 'lang-code-2': string[] }
  *  - @todo: check if it's convenient an ES6 Set/Map implementation
  */
-export class GameObjectDictionary {
+export class GameTextDictionary {
     /**
      *
      * @param {Object} [dict] a plain js object in the form of { 'lang-code-1': string[], 'lang-code-2': string[] }

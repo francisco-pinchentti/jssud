@@ -7,7 +7,7 @@ export class GameEvent extends GameObject {
     /**
      * @param {function} onSuccessCb
      * @param {string} [id]
-     * @param {GameObjectDictionary} [description]
+     * @param {GameTextDictionary} [description]
      * @param {function} [onFailureCb]
      */
     constructor(onSuccessCb, id, description, onFailureCb) {

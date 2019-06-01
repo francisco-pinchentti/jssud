@@ -1,5 +1,5 @@
 import { GameObject } from './GameObject'
-import { GameObjectDictionary } from './GameObjectDictionary'
+import { GameTextDictionary } from './text/GameTextDictionary'
 
 /**
  * Represents an item (or in game object) that the player may eventually acquire and/or use
@@ -24,7 +24,7 @@ export class InventoryItem extends GameObject {
         onPickUpCb
     ) {
         super(id, description)
-        this.name = new GameObjectDictionary(name)
+        this.name = new GameTextDictionary(name)
         this.onUseCb = onUseCb
         this.pickUpPoints = pickUpPoints
         this.onLookCb = onLookCb

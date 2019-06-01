@@ -1,4 +1,4 @@
-import { GameObjectDictionary } from '../GameObjectDictionary'
+import { GameTextDictionary } from '../text/GameTextDictionary'
 import { CommandEvent } from './CommandEvent'
 
 /**
@@ -24,6 +24,6 @@ export class ShowScoreEvent extends CommandEvent {
         }
     ) {
         super(onSuccessCb, commands)
-        this.templates = new GameObjectDictionary(templates)
+        this.templates = new GameTextDictionary(templates)
     }
 }

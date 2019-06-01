@@ -1,6 +1,6 @@
 import { CLIHandler } from './CLIHandler'
 import { PlayerCharacter } from './PlayerCharacter'
-import { GameObjectDictionary } from './GameObjectDictionary'
+import { GameTextDictionary } from './text/GameTextDictionary'
 const uuidv4 = require('uuid/v4')
 
 /**
@@ -8,24 +8,24 @@ const uuidv4 = require('uuid/v4')
  * @constant DEFAULT_CONSTANTS_DICTIONARY
  */
 const DEFAULT_CONSTANTS_DICTIONARY = {
-    commandError: new GameObjectDictionary({
+    commandError: new GameTextDictionary({
         en: ["didn't get that"],
         es: ['no entiendo eso último'],
     }),
     // post basic events callback execution messages:
-    onTurn: new GameObjectDictionary({
+    onTurn: new GameTextDictionary({
         en: ['\t on turn'],
         es: ['\t en el turno'],
     }),
-    onExit: new GameObjectDictionary({
+    onExit: new GameTextDictionary({
         en: ['Goodbye\n'],
         es: ['Adios\n'],
     }),
-    onLookRoom: new GameObjectDictionary({
+    onLookRoom: new GameTextDictionary({
         en: ['here you see'],
         es: ['aquí puedes ver'],
     }),
-    onLoad: new GameObjectDictionary({
+    onLoad: new GameTextDictionary({
         en: ['welcome back'],
         es: ['bienvenido nuevamente'],
     }),
@@ -271,7 +271,7 @@ export class Game {
 
     /**
      *
-     * @param {GameObjectDictionary} messageDict
+     * @param {GameTextDictionary} messageDict
      */
     printLocalizedMessage(messageDict) {
         this._print(messageDict.getAsStringForGameCurrentLanguage(this))

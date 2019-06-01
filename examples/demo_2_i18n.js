@@ -3,7 +3,7 @@ import {
     Game,
     InventoryItem,
     GameEngine,
-    GameObjectDictionary,
+    GameTextDictionary,
 } from '../src'
 import {
     CommandEvent,
@@ -86,7 +86,7 @@ function initializeNewGame() {
                 .find(evt => evt.id === 'ce002')
             if (lockedRoomEvent) {
                 game.printLocalizedMessage(
-                    new GameObjectDictionary({
+                    new GameTextDictionary({
                         en: ['You open the door to the north...'],
                         es: ['Abres la puerta hacia el norte...'],
                     })
@@ -98,7 +98,7 @@ function initializeNewGame() {
                 })
             } else {
                 game.printLocalizedMessage(
-                    new GameObjectDictionary({
+                    new GameTextDictionary({
                         en: ['It seems it cannot be used here...'],
                         es: ['Aparentemente no puede usarse aquí...'],
                     })

@@ -1,4 +1,4 @@
-import { GameObjectDictionary } from './GameObjectDictionary'
+import { GameTextDictionary } from './text/GameTextDictionary'
 
 /**
  * @abstract
@@ -7,7 +7,7 @@ import { GameObjectDictionary } from './GameObjectDictionary'
 export class GameObject {
     constructor(id, description) {
         this.id = id
-        this.description = new GameObjectDictionary(description)
+        this.description = new GameTextDictionary(description)
     }
 
     getId() {

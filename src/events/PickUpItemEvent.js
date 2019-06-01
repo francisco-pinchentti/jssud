@@ -29,6 +29,7 @@ export class PickUpItemEvent extends GameEvent {
     }
 
     evaluateOn(game) {
+        // @todo: Use GameCompundSentence lookup
         const noun = this.item.getNameForGameCurrentLanguage(game)
         const verbs = game.getLocalizedValueFromConstantsDictionary('pickUp')
         return verbsNounMapping(verbs, noun).find(
