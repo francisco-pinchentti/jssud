@@ -1,6 +1,5 @@
 import { GameObject } from './GameObject'
-import { PickUpItemEvent } from './events/PickUpItemEvent'
-import { RoomTransitionEvent } from './events/RoomTransitionEvent'
+import { PickUpItemEvent, RoomTransitionEvent } from '../events'
 
 /**
  * A single game room

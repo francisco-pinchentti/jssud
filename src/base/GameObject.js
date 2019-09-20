@@ -1,4 +1,4 @@
-import { GameTextDictionary } from './text/GameTextDictionary'
+import { GameTextDictionary } from '../text/GameTextDictionary'
 
 /**
  * @abstract

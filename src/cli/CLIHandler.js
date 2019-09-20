@@ -1,6 +1,6 @@
 const readline = require('readline')
 const fs = require('fs')
-import { AbstractIOHandler } from './AbstractIOHandler'
+import { AbstractIOHandler } from '../base/AbstractIOHandler'
 
 /**
  * An IOHandler that's designed to use the NodeJS CLI

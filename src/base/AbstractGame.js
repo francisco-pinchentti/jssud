@@ -1,50 +1,8 @@
-import { CLIHandler } from './CLIHandler'
 import { PlayerCharacter } from './PlayerCharacter'
-import { GameTextDictionary } from './text/GameTextDictionary'
+import { GameTextDictionary } from '../text/GameTextDictionary'
 const uuidv4 = require('uuid/v4')
 
-/**
- * @todo review name, location
- * @constant DEFAULT_CONSTANTS_DICTIONARY
- */
-const DEFAULT_CONSTANTS_DICTIONARY = {
-    commandError: new GameTextDictionary({
-        en: ["didn't get that"],
-        es: ['no entiendo eso último'],
-    }),
-    // post basic events callback execution messages:
-    onTurn: new GameTextDictionary({
-        en: ['\t on turn'],
-        es: ['\t en el turno'],
-    }),
-    onExit: new GameTextDictionary({
-        en: ['Goodbye\n'],
-        es: ['Adios\n'],
-    }),
-    onLookRoom: new GameTextDictionary({
-        en: ['here you see'],
-        es: ['aquí puedes ver'],
-    }),
-    onLoad: new GameTextDictionary({
-        en: ['welcome back'],
-        es: ['bienvenido nuevamente'],
-    }),
-    // basic commands dictionaries:
-    use: {
-        en: ['use', 'u'],
-        es: ['usar', 'u'],
-    },
-    pickUp: {
-        en: ['take', 'grab', 'pick up'],
-        es: ['coger', 'agarrar', 'tomar'],
-    },
-    look: {
-        en: ['l', 'look', 'examine'],
-        es: ['mirar', 'examinar', 'ver'],
-    },
-}
-
-export class Game {
+export class AbstractGame {
     /**
      *
      * @param {Array<GameEvent>} [events=[]]
@@ -56,13 +14,13 @@ export class Game {
      * @param {object} [constantsDictionary]
      */
     constructor(
-        events = [],
-        rooms = [],
-        availableLanguages = ['en'],
-        currentLanguage = 'en',
-        IOHandler = new CLIHandler(),
-        userDefinedVariables = {},
-        constantsDictionary = DEFAULT_CONSTANTS_DICTIONARY
+        events,
+        rooms,
+        availableLanguages,
+        currentLanguage,
+        IOHandler,
+        userDefinedVariables,
+        constantsDictionary
     ) {
         /**
          * @property {Array<GameEvent>} events
@@ -114,42 +72,8 @@ export class Game {
         this._hideOutput = true
     }
 
-    /**
-     * Starts the game loop
-     *
-     *  - Will end on quit command or process kill
-     */
-    async run() {
-        this._isRunning = true
-        this._hideOutput = false
-        while (this._isRunning) {
-            this.printCurrentRoomSummary()
-            let _success = false
-
-            await this.readNewInput()
-
-            _success = this.evalGlobalEvents()
-            _success = _success || this.evalLocalEvents()
-
-            if (!_success) {
-                this.printArbitraryMessage(
-                    this.getValueFromConstantsDictionary(
-                        'commandError'
-                    ).getAsStringForGameCurrentLanguage(this)
-                )
-            }
-
-            this._turnCount++
-            this.printArbitraryMessage(
-                `${this.getValueFromConstantsDictionary(
-                    'onTurn'
-                ).getAsStringForGameCurrentLanguage(this)} ${this._turnCount}`
-            )
-        }
-
-        this.IOHandler.onGameDestroy()
-
-        return this._intent
+    run() {
+        throw new Error('Abstract method')
     }
 
     /**
@@ -207,8 +131,8 @@ export class Game {
         return this.IOHandler.getLastInput()
     }
 
-    async readNewInput() {
-        return this.IOHandler.read(`<${this._id}>  <====== `)
+    readNewInput() {
+        throw new Error('Abstract method')
     }
 
     getPlayerCharacter() {
@@ -282,42 +206,12 @@ export class Game {
         this._print(messageDict.getAsStringForGameCurrentLanguage(this))
     }
 
-    /**
-     * When game main loop stops the run method will return an object describing what happened
-     * @returns {object}
-     */
-    _createExitIntent() {
-        return {
-            id: this._id,
-            lastInput: this.getLastInput(),
-            language: this._currentLanguage,
-            turnCount: this._turnCount,
-        }
-    }
-
     quit() {
-        const message = this.getValueFromConstantsDictionary(
-            'onExit'
-        ).getAsStringForGameCurrentLanguage(this)
-        this.printArbitraryMessage(message)
-        this._isRunning = false
-        this._intent = Object.assign(
-            {},
-            {
-                quit: true,
-            }
-        )
+        throw new Error('Abstract method')
     }
 
     onLoad(filename) {
-        this._isRunning = false
-        this._intent = Object.assign(
-            {},
-            {
-                load: true,
-                filenameToLoad: filename,
-            }
-        )
+        throw new Error('Abstract method')
     }
 
     doLoad(filename) {

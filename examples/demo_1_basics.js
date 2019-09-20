@@ -1,12 +1,15 @@
-import { Room, Game, GameEngine, InventoryItem } from '../src'
 import {
     CommandEvent,
-    SaveGameEvent,
     QuitGameEvent,
     LookRoomEvent,
     ShowScoreEvent,
+    SaveGameEvent,
     LoadGameEvent,
-} from '../src/events'
+    Room,
+    InventoryItem,
+    CLIGame,
+    CLIGameEngine,
+} from '../src'
 
 /**
  * Demo 1: Basics
@@ -91,12 +94,12 @@ function initializeNewGame() {
 
     rooms[0].addItem(keyItem)
 
-    let g = new Game(events, rooms)
+    let g = new CLIGame(events, rooms)
     g.movePlayerCharacterToRoom(rooms[0])
     return g
 }
 
-const ge = new GameEngine(initializeNewGame)
+const ge = new CLIGameEngine(initializeNewGame)
 ge.run().then(result => {
     console.log(`<DEBUG> Demo script exit ${result}`)
     process.exit(0)

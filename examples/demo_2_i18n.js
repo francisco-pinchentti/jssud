@@ -1,10 +1,7 @@
-import {
-    Room,
-    Game,
-    InventoryItem,
-    GameEngine,
-    GameTextDictionary,
-} from '../src'
+import { CLIGame, CLIGameEngine } from '../src/cli'
+
+import { Room, InventoryItem } from '../src/base'
+
 import {
     CommandEvent,
     ChangeLanguageEvent,
@@ -14,6 +11,8 @@ import {
     LoadGameEvent,
     SaveGameEvent,
 } from '../src/events'
+
+import { GameTextDictionary } from '../src/text'
 
 /**
  * Demo 2: i18n
@@ -122,13 +121,13 @@ function initializeNewGame() {
 
     rooms[0].addItem(keyItem)
 
-    const g = new Game(events, rooms, ['en', 'es'], 'en')
+    const g = new CLIGame(events, rooms, ['en', 'es'], 'en')
     g.movePlayerCharacterToRoom(rooms[0])
 
     return g
 }
 
-const ge = new GameEngine(initializeNewGame)
+const ge = new CLIGameEngine(initializeNewGame)
 ge.run().then(result => {
     console.log(`<DEBUG> Demo script exit ${result}`)
     process.exit(0)

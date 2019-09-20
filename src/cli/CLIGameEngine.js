@@ -2,7 +2,7 @@
  *  - Wraps a Game running instance
  *  - Normally a single instance is created with a function that returns a new Game object
  */
-export class GameEngine {
+export class CLIGameEngine {
     /**
      *
      * @param {function<Game>} gameBuildFunction A game factory function. It should return a complete Game object instance

@@ -1,5 +1,5 @@
 import { GameObject } from './GameObject'
-import { GameTextDictionary } from './text/GameTextDictionary'
+import { GameTextDictionary } from '../text/GameTextDictionary'
 
 /**
  * Represents an item (or in game object) that the player may eventually acquire and/or use
