@@ -57,8 +57,11 @@ function initializeNewGame() {
             [
                 new CommandEvent(
                     game =>
-                        game.printArbitraryMessage(
-                            'the door seems to be locked'
+                        game.printLocalizedMessage(
+                            new GameTextDictionary({
+                                en: ['the door seems to be locked'],
+                                es: ['la puerta parece estar cerrada'],
+                            })
                         ),
                     {
                         en: ['go north', 'north', 'n'],

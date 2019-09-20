@@ -1,7 +1,7 @@
-import { verbsNounMapping } from '../utils/TextUtils'
 import { GameEvent } from './GameEvent'
 import { UseItemEvent } from './UseItemEvent'
 import { LookItemEvent } from './LookItemEvent'
+import { verbsNounMapping } from '../text/TextUtils'
 
 /**
  * @extends GameEvent
@@ -29,7 +29,6 @@ export class PickUpItemEvent extends GameEvent {
     }
 
     evaluateOn(game) {
-        // @todo: Use GameCompundSentence lookup
         const noun = this.item.getNameForGameCurrentLanguage(game)
         const verbs = game.getLocalizedValueFromConstantsDictionary('pickUp')
         return verbsNounMapping(verbs, noun).find(

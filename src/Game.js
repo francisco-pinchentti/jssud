@@ -114,6 +114,11 @@ export class Game {
         this._hideOutput = true
     }
 
+    /**
+     * Starts the game loop
+     *
+     *  - Will end on quit command or process kill
+     */
     async run() {
         this._isRunning = true
         this._hideOutput = false

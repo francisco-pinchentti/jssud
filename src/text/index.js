@@ -1,2 +1,2 @@
-export { GameTextDictionary } from "./GameTextDictionary";
-export { GameCompoundSentence } from "./GameCompoundSentence";
+export { GameTextDictionary } from './GameTextDictionary'
+export { verbsNounMapping } from './TextUtils'
