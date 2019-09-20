@@ -8,7 +8,7 @@ export class AbstractIOHandler {
         /**
          * @property {Array<string>} inputs History of commands entered by user
          */
-        this.inputs = inputs
+        this.inputs = inputs;
     }
 
     /**
@@ -23,15 +23,15 @@ export class AbstractIOHandler {
     clearOutputArea() {}
 
     feedInput(input) {
-        this.inputs.push(input)
+        this.inputs.push(input);
     }
 
     getLastInput() {
-        return this.inputs[this.inputs.length - 1]
+        return this.inputs[this.inputs.length - 1];
     }
 
     getInputAt(i) {
-        return this.inputs[i]
+        return this.inputs[i];
     }
 
     /**

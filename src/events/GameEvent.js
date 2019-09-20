@@ -1,4 +1,4 @@
-import { GameObject } from '../base/GameObject'
+import { GameObject } from '../base/GameObject';
 
 /**
  * @abstract
@@ -11,9 +11,9 @@ export class GameEvent extends GameObject {
      * @param {function} [onFailureCb]
      */
     constructor(onSuccessCb, id, description, onFailureCb) {
-        super(id, description)
-        this.onSuccessCb = onSuccessCb
-        this.onFailureCb = onFailureCb
+        super(id, description);
+        this.onSuccessCb = onSuccessCb;
+        this.onFailureCb = onFailureCb;
     }
 
     /**
@@ -24,13 +24,13 @@ export class GameEvent extends GameObject {
 
     onSuccess(game) {
         if (!!this.onSuccessCb) {
-            this.onSuccessCb.call(this, game)
+            this.onSuccessCb.call(this, game);
         }
     }
 
     onFailure(game) {
         if (!!this.onFailureCb) {
-            this.onFailureCb.call(this, game)
+            this.onFailureCb.call(this, game);
         }
     }
 }

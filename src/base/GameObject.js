@@ -1,4 +1,4 @@
-import { GameTextDictionary } from '../text/GameTextDictionary'
+import { GameTextDictionary } from '../text/GameTextDictionary';
 
 /**
  * @abstract
@@ -6,26 +6,26 @@ import { GameTextDictionary } from '../text/GameTextDictionary'
  */
 export class GameObject {
     constructor(id, description) {
-        this.id = id
-        this.description = new GameTextDictionary(description)
+        this.id = id;
+        this.description = new GameTextDictionary(description);
     }
 
     getId() {
-        return this.id
+        return this.id;
     }
 
     getDescriptionForLanguage(lang) {
-        return this.description.getForLanguage(lang)
+        return this.description.getForLanguage(lang);
     }
 
     getDescriptionForGameCurrentLanguage(game) {
-        return this.description.getForGameCurrentLanguage(game)
+        return this.description.getForGameCurrentLanguage(game);
     }
 
     getAsStringForGameCurrentLanguage(game, separator) {
         return this.description.getAsStringForGameCurrentLanguage(
             game,
             separator
-        )
+        );
     }
 }

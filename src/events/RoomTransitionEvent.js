@@ -1,4 +1,4 @@
-import { CommandEvent } from './CommandEvent'
+import { CommandEvent } from './CommandEvent';
 
 /**
  * @extends CommandEvent
@@ -12,11 +12,11 @@ export class RoomTransitionEvent extends CommandEvent {
     constructor(commands, destination, id) {
         super(
             game => {
-                game.movePlayerCharacterToRoom(this.destination)
+                game.movePlayerCharacterToRoom(this.destination);
             },
             commands,
             id
-        )
-        this.destination = destination
+        );
+        this.destination = destination;
     }
 }

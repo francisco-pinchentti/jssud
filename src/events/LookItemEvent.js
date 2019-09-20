@@ -1,5 +1,5 @@
-import { GameEvent } from './GameEvent'
-import { verbsNounMapping } from '../text/TextUtils'
+import { GameEvent } from './GameEvent';
+import { verbsNounMapping } from '../text/TextUtils';
 
 /**
  * @extends GameEvent
@@ -11,17 +11,17 @@ export class LookItemEvent extends GameEvent {
      */
     constructor(item, id) {
         super(game => {
-            game.printLocalizedMessage(this.item.description)
-            item.onLook(game)
-        }, id)
-        this.item = item
+            game.printLocalizedMessage(this.item.description);
+            item.onLook(game);
+        }, id);
+        this.item = item;
     }
 
     evaluateOn(game) {
-        const noun = this.item.getNameForGameCurrentLanguage(game)
-        const verbs = game.getLocalizedValueFromConstantsDictionary('look')
+        const noun = this.item.getNameForGameCurrentLanguage(game);
+        const verbs = game.getLocalizedValueFromConstantsDictionary('look');
         return verbsNounMapping(verbs, noun).find(
             c => c === game.getLastInput()
-        )
+        );
     }
 }

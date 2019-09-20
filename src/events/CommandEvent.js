@@ -1,5 +1,5 @@
-import { GameTextDictionary } from '../text/GameTextDictionary'
-import { GameEvent } from './GameEvent'
+import { GameTextDictionary } from '../text/GameTextDictionary';
+import { GameEvent } from './GameEvent';
 
 /**
  * An event that will occur when the game receives gives predefined input
@@ -15,14 +15,14 @@ export class CommandEvent extends GameEvent {
      * @param {function} [onFailureCb]
      */
     constructor(onSuccessCb, commands, id, description, onFailureCb) {
-        super(onSuccessCb, id, description, onFailureCb)
-        this.commands = new GameTextDictionary(commands)
+        super(onSuccessCb, id, description, onFailureCb);
+        this.commands = new GameTextDictionary(commands);
     }
 
     evaluateOn(game) {
         // @todo trim/sanitize input
         return this.commands
             .getForGameCurrentLanguage(game)
-            .find(c => c === game.getLastInput())
+            .find(c => c === game.getLastInput());
     }
 }

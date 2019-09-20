@@ -1,5 +1,5 @@
-import { GameObject } from './GameObject'
-import { GameTextDictionary } from '../text/GameTextDictionary'
+import { GameObject } from './GameObject';
+import { GameTextDictionary } from '../text/GameTextDictionary';
 
 /**
  * Represents an item (or in game object) that the player may eventually acquire and/or use
@@ -23,16 +23,16 @@ export class InventoryItem extends GameObject {
         onLookCb,
         onPickUpCb
     ) {
-        super(id, description)
-        this.name = new GameTextDictionary(name)
-        this.onUseCb = onUseCb
-        this.pickUpPoints = pickUpPoints
-        this.onLookCb = onLookCb
-        this.onPickUpCb = onPickUpCb
+        super(id, description);
+        this.name = new GameTextDictionary(name);
+        this.onUseCb = onUseCb;
+        this.pickUpPoints = pickUpPoints;
+        this.onLookCb = onLookCb;
+        this.onPickUpCb = onPickUpCb;
     }
 
     getNameForGameCurrentLanguage(game) {
-        return this.name.getForGameCurrentLanguage(game)
+        return this.name.getForGameCurrentLanguage(game);
     }
 
     /**
@@ -40,7 +40,7 @@ export class InventoryItem extends GameObject {
      * @param {Game} game
      */
     useOn(game) {
-        this.onUseCb.call(this, game)
+        this.onUseCb.call(this, game);
     }
 
     /**
@@ -49,7 +49,7 @@ export class InventoryItem extends GameObject {
      */
     onLook(game) {
         if (this.onLookCb) {
-            this.onLookCb.call(this, game)
+            this.onLookCb.call(this, game);
         }
     }
 
@@ -59,7 +59,7 @@ export class InventoryItem extends GameObject {
      */
     onPickUp(game) {
         if (this.onPickUpCb) {
-            this.onPickUpCb.call(this, game)
+            this.onPickUpCb.call(this, game);
         }
     }
 }

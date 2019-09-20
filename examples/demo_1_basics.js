@@ -9,7 +9,7 @@ import {
     InventoryItem,
     CLIGame,
     CLIGameEngine,
-} from '../src'
+} from '../src';
 
 /**
  * Demo 1: Basics
@@ -38,7 +38,7 @@ function initializeNewGame() {
         new ShowScoreEvent(),
         new SaveGameEvent(),
         new LoadGameEvent(),
-    ]
+    ];
 
     const rooms = [
         new Room(
@@ -63,23 +63,23 @@ function initializeNewGame() {
         new Room([], [], 'r002', {
             en: ['This is the second room'],
         }),
-    ]
+    ];
 
     const keyItem = new InventoryItem(
         game => {
             // looking for an event using it's id:
             const lockedRoomEvent = rooms[0]
                 .getEvents()
-                .find(evt => evt.id === 'ce002')
+                .find(evt => evt.id === 'ce002');
             if (lockedRoomEvent) {
-                game.printArbitraryMessage('You open the door to the north...')
-                rooms[0].removeEvent(lockedRoomEvent)
+                game.printArbitraryMessage('You open the door to the north...');
+                rooms[0].removeEvent(lockedRoomEvent);
                 // an event onSuccess may be used to create another:
                 rooms[0].addDestination(rooms[1], {
                     en: ['go north'],
-                })
+                });
             } else {
-                game.printArbitraryMessage("it seems it can't be used here...")
+                game.printArbitraryMessage("it seems it can't be used here...");
             }
         },
         'it001',
@@ -90,17 +90,17 @@ function initializeNewGame() {
             en: ['key'],
         },
         1
-    )
+    );
 
-    rooms[0].addItem(keyItem)
+    rooms[0].addItem(keyItem);
 
-    let g = new CLIGame(events, rooms)
-    g.movePlayerCharacterToRoom(rooms[0])
-    return g
+    let g = new CLIGame(events, rooms);
+    g.movePlayerCharacterToRoom(rooms[0]);
+    return g;
 }
 
-const ge = new CLIGameEngine(initializeNewGame)
+const ge = new CLIGameEngine(initializeNewGame);
 ge.run().then(result => {
-    console.log(`<DEBUG> Demo script exit ${result}`)
-    process.exit(0)
-})
+    console.log(`<DEBUG> Demo script exit ${result}`);
+    process.exit(0);
+});

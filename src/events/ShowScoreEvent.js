@@ -1,5 +1,5 @@
-import { GameTextDictionary } from '../text/GameTextDictionary'
-import { CommandEvent } from './CommandEvent'
+import { GameTextDictionary } from '../text/GameTextDictionary';
+import { CommandEvent } from './CommandEvent';
 
 /**
  * @extends CommandEvent
@@ -19,11 +19,11 @@ export class ShowScoreEvent extends CommandEvent {
             const message = this.templates
                 .getForGameCurrentLanguage(game)
                 .map(s => s.replace('%1', game.getPlayerCharacter().getScore()))
-                .join('')
-            game.printArbitraryMessage(message)
+                .join('');
+            game.printArbitraryMessage(message);
         }
     ) {
-        super(onSuccessCb, commands)
-        this.templates = new GameTextDictionary(templates)
+        super(onSuccessCb, commands);
+        this.templates = new GameTextDictionary(templates);
     }
 }

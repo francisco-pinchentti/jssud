@@ -1,5 +1,5 @@
-import { GameObject } from './GameObject'
-import { PickUpItemEvent, RoomTransitionEvent } from '../events'
+import { GameObject } from './GameObject';
+import { PickUpItemEvent, RoomTransitionEvent } from '../events';
 
 /**
  * A single game room
@@ -7,52 +7,52 @@ import { PickUpItemEvent, RoomTransitionEvent } from '../events'
  */
 export class Room extends GameObject {
     constructor(items = [], events = [], id, description) {
-        super(id, description)
+        super(id, description);
 
         /**
          * @property {Array<InventoryItem>} items
          */
-        this.items = items
+        this.items = items;
 
         /**
          * @property {Array<GameEvent>} events
          */
-        this.events = events
+        this.events = events;
 
         /**
          * @see: Assumes all items can be picked
          */
-        this.items.forEach(item => this.addEvent(new PickUpItemEvent(item)))
+        this.items.forEach(item => this.addEvent(new PickUpItemEvent(item)));
 
         /**
          * @property {Array<Room>} destinations
          */
-        this.destinations = []
+        this.destinations = [];
     }
 
     addEvent(evt) {
-        this.events.push(evt)
+        this.events.push(evt);
     }
 
     removeEvent(evt) {
-        this.events = this.events.filter(e => e !== evt)
+        this.events = this.events.filter(e => e !== evt);
     }
 
     getEvents() {
-        return this.events
+        return this.events;
     }
 
     addItem(item) {
-        this.items.push(item)
-        this.addEvent(new PickUpItemEvent(item))
+        this.items.push(item);
+        this.addEvent(new PickUpItemEvent(item));
     }
 
     removeItem(item) {
-        this.items = this.items.filter(i => i !== item)
+        this.items = this.items.filter(i => i !== item);
     }
 
     getItems() {
-        return this.items
+        return this.items;
     }
 
     /**
@@ -63,15 +63,17 @@ export class Room extends GameObject {
      * @param {string} [id]
      */
     addDestination(destinationRoom, commands, id) {
-        this.destinations.push(destinationRoom)
-        this.events.push(new RoomTransitionEvent(commands, destinationRoom, id))
+        this.destinations.push(destinationRoom);
+        this.events.push(
+            new RoomTransitionEvent(commands, destinationRoom, id)
+        );
     }
 
     hasItems() {
-        return this.items.length > 0
+        return this.items.length > 0;
     }
 
     getItemsNamesForGameCurrentLanguage(game) {
-        return this.items.map(item => item.getNameForGameCurrentLanguage(game))
+        return this.items.map(item => item.getNameForGameCurrentLanguage(game));
     }
 }

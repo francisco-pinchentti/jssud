@@ -1,6 +1,6 @@
-import { CLIGame, CLIGameEngine } from '../src/cli'
+import { CLIGame, CLIGameEngine } from '../src/cli';
 
-import { Room, InventoryItem } from '../src/base'
+import { Room, InventoryItem } from '../src/base';
 
 import {
     CommandEvent,
@@ -10,9 +10,9 @@ import {
     ShowScoreEvent,
     LoadGameEvent,
     SaveGameEvent,
-} from '../src/events'
+} from '../src/events';
 
-import { GameTextDictionary } from '../src/text'
+import { GameTextDictionary } from '../src/text';
 
 /**
  * Demo 2: i18n
@@ -48,7 +48,7 @@ function initializeNewGame() {
             en: ['save', 'savegame'],
             es: ['salvar', 'guardar'],
         }),
-    ]
+    ];
 
     const rooms = [
         new Room(
@@ -79,32 +79,32 @@ function initializeNewGame() {
             en: ['Room 2: This is the second room'],
             es: ['Sala 2: Esta es la segunda habitación'],
         }),
-    ]
+    ];
 
     const keyItem = new InventoryItem(
         game => {
             const lockedRoomEvent = rooms[0]
                 .getEvents()
-                .find(evt => evt.id === 'ce002')
+                .find(evt => evt.id === 'ce002');
             if (lockedRoomEvent) {
                 game.printLocalizedMessage(
                     new GameTextDictionary({
                         en: ['You open the door to the north...'],
                         es: ['Abres la puerta hacia el norte...'],
                     })
-                )
-                rooms[0].removeEvent(lockedRoomEvent)
+                );
+                rooms[0].removeEvent(lockedRoomEvent);
                 rooms[0].addDestination(rooms[1], {
                     en: ['go north', 'north', 'n'],
                     es: ['ir al norte', 'norte', 'n'],
-                })
+                });
             } else {
                 game.printLocalizedMessage(
                     new GameTextDictionary({
                         en: ['It seems it cannot be used here...'],
                         es: ['Aparentemente no puede usarse aquí...'],
                     })
-                )
+                );
             }
         },
         'it001',
@@ -117,22 +117,22 @@ function initializeNewGame() {
             es: ['llave'],
         },
         1
-    )
+    );
 
-    rooms[0].addItem(keyItem)
+    rooms[0].addItem(keyItem);
 
-    const g = new CLIGame(events, rooms, ['en', 'es'], 'en')
-    g.movePlayerCharacterToRoom(rooms[0])
+    const g = new CLIGame(events, rooms, ['en', 'es'], 'en');
+    g.movePlayerCharacterToRoom(rooms[0]);
 
-    return g
+    return g;
 }
 
-window.getDemo = () => new CLIGameEngine(initializeNewGame)
+window.getDemo = () => new CLIGameEngine(initializeNewGame);
 
 window.runDemo = () => {
-    const ge = window.getDemo()
+    const ge = window.getDemo();
     ge.run().then(result => {
-        console.log(`<DEBUG> Demo script exit ${result}`)
-        process.exit(0)
-    })
-}
+        console.log(`<DEBUG> Demo script exit ${result}`);
+        process.exit(0);
+    });
+};

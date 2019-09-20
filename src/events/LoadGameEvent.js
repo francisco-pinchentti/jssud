@@ -1,4 +1,4 @@
-import { CommandEvent } from './CommandEvent'
+import { CommandEvent } from './CommandEvent';
 
 /**
  * @extends CommandEvent
@@ -10,14 +10,14 @@ export class LoadGameEvent extends CommandEvent {
      */
     constructor(commands = { en: ['load'] }, filename = 'savegame.dat') {
         super(game => {
-            game.onLoad(this.filename)
-        }, commands)
-        this.filename = filename
+            game.onLoad(this.filename);
+        }, commands);
+        this.filename = filename;
 
         /**
          * @readonly
          * @property {boolean} avoidPersist
          */
-        this.avoidPersist = true
+        this.avoidPersist = true;
     }
 }

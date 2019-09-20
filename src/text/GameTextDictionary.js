@@ -10,11 +10,11 @@ export class GameTextDictionary {
      * @param {Object} [dict] a plain js object in the form of { 'lang-code-1': string[], 'lang-code-2': string[] }
      */
     constructor(dict) {
-        this.dict = dict
+        this.dict = dict;
     }
 
     setForLanguage(lang, content) {
-        this.dict[lang] = content
+        this.dict[lang] = content;
     }
 
     /**
@@ -23,7 +23,7 @@ export class GameTextDictionary {
      * @returns {Array<string>}
      */
     getForLanguage(lang) {
-        return this.dict[lang]
+        return this.dict[lang];
     }
 
     /**
@@ -32,7 +32,7 @@ export class GameTextDictionary {
      * @returns {Array<string>}
      */
     getForGameCurrentLanguage(game) {
-        return this.getForLanguage(game.getCurrentLanguage())
+        return this.getForLanguage(game.getCurrentLanguage());
     }
 
     /**
@@ -43,13 +43,13 @@ export class GameTextDictionary {
      */
     getAsStringForGameCurrentLanguage(game, separator = '\n') {
         // @todo: make support for string[] and string using typeof
-        return this.getForLanguage(game.getCurrentLanguage()).join(separator)
+        return this.getForLanguage(game.getCurrentLanguage()).join(separator);
     }
 
     getAsFlatArray() {
         return Object.keys(this.dict).reduce(
             (acc, k) => acc.concat(this.dict[k]),
             []
-        )
+        );
     }
 }

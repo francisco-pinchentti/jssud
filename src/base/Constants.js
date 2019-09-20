@@ -1,4 +1,4 @@
-import { GameTextDictionary } from '../text'
+import { GameTextDictionary } from '../text';
 
 /**
  * @constant DEFAULT_CONSTANTS_DICTIONARY
@@ -38,4 +38,4 @@ export const DEFAULT_CONSTANTS_DICTIONARY = {
         en: ['l', 'look', 'examine'],
         es: ['mirar', 'examinar', 'ver'],
     },
-}
+};

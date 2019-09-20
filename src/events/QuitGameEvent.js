@@ -1,4 +1,4 @@
-import { CommandEvent } from './CommandEvent'
+import { CommandEvent } from './CommandEvent';
 
 /**
  * An event that represents when a player looks or examines the current room in which she is standing
@@ -13,6 +13,6 @@ export class QuitGameEvent extends CommandEvent {
         commands = { en: ['quit', 'q'] },
         onSuccessCb = game => game.quit()
     ) {
-        super(onSuccessCb, commands)
+        super(onSuccessCb, commands);
     }
 }

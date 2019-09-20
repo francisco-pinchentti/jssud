@@ -1,7 +1,7 @@
-import { GameEvent } from './GameEvent'
-import { UseItemEvent } from './UseItemEvent'
-import { LookItemEvent } from './LookItemEvent'
-import { verbsNounMapping } from '../text/TextUtils'
+import { GameEvent } from './GameEvent';
+import { UseItemEvent } from './UseItemEvent';
+import { LookItemEvent } from './LookItemEvent';
+import { verbsNounMapping } from '../text/TextUtils';
 
 /**
  * @extends GameEvent
@@ -13,26 +13,26 @@ export class PickUpItemEvent extends GameEvent {
      */
     constructor(item, id) {
         super(game => {
-            game.addItemToPlayerCharacter(this.item)
-            game.getPlayerCharacter().addToScore(this.item.pickUpPoints)
+            game.addItemToPlayerCharacter(this.item);
+            game.getPlayerCharacter().addToScore(this.item.pickUpPoints);
             game.getPlayerCharacter()
                 .getCurrentRoom()
-                .removeEvent(this)
+                .removeEvent(this);
             game.getPlayerCharacter()
                 .getCurrentRoom()
-                .removeItem(this.item)
-            game.addEvent(new UseItemEvent(item))
-            game.addEvent(new LookItemEvent(item))
-            item.onPickUp(game)
-        }, id)
-        this.item = item
+                .removeItem(this.item);
+            game.addEvent(new UseItemEvent(item));
+            game.addEvent(new LookItemEvent(item));
+            item.onPickUp(game);
+        }, id);
+        this.item = item;
     }
 
     evaluateOn(game) {
-        const noun = this.item.getNameForGameCurrentLanguage(game)
-        const verbs = game.getLocalizedValueFromConstantsDictionary('pickUp')
+        const noun = this.item.getNameForGameCurrentLanguage(game);
+        const verbs = game.getLocalizedValueFromConstantsDictionary('pickUp');
         return verbsNounMapping(verbs, noun).find(
             c => c === game.getLastInput()
-        )
+        );
     }
 }
