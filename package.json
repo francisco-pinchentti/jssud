@@ -11,7 +11,9 @@
     "prettier-write": "node_modules/prettier/bin-prettier.js --write README.md 'src/**/*.js' 'examples/**/*.js'",
     "doc": "./node_modules/.bin/esdoc src/**/*.js",
     "debug": "cd examples; node -r esm --inspect demo_1_basics.js;",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-browser-demo": "node_modules/.bin/browserify examples/demo_3_browser.js -p esmify > dist/browser-demo.js && cp examples/demo_3_browser.html dist/index.html",
+    "serve-browser-demo": "node_modules/.bin/lite-server --baseDir dist"
   },
   "keywords": [
     "js",
@@ -21,15 +23,18 @@
   "author": "Francisco Pinchentti",
   "license": "MIT",
   "devDependencies": {
+    "browserify": "^16.5.0",
     "esdoc": "^1.1.0",
     "esdoc-ecmascript-proposal-plugin": "^1.0.0",
     "esdoc-standard-plugin": "^1.0.0",
+    "esmify": "^2.1.1",
+    "lite-server": "^2.5.4",
     "prettier": "1.16.4"
   },
   "prettier": {
     "trailingComma": "es5",
     "tabWidth": 4,
-    "semi": false,
+    "semi": true,
     "singleQuote": true,
     "endOfLine": "lf"
   },
