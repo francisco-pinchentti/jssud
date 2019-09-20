@@ -11,6 +11,8 @@
     "prettier-write": "node_modules/prettier/bin-prettier.js --write README.md 'src/**/*.js' 'examples/**/*.js'",
     "doc": "./node_modules/.bin/esdoc src/**/*.js",
     "debug": "cd examples; node -r esm --inspect demo_1_basics.js;",
+    "build": "node_modules/.bin/babel src --out-file build/jssud.js",
+    "serve": "node_modules/.bin/lite-server --baseDir build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -21,9 +23,16 @@
   "author": "Francisco Pinchentti",
   "license": "MIT",
   "devDependencies": {
+    "@babel/cli": "^7.6.0",
+    "@babel/core": "^7.6.0",
+    "@babel/plugin-transform-modules-amd": "^7.5.0",
+    "@babel/plugin-transform-modules-systemjs": "^7.5.0",
+    "@babel/plugin-transform-modules-umd": "^7.2.0",
+    "@babel/preset-env": "^7.6.0",
     "esdoc": "^1.1.0",
     "esdoc-ecmascript-proposal-plugin": "^1.0.0",
     "esdoc-standard-plugin": "^1.0.0",
+    "lite-server": "^2.5.4",
     "prettier": "1.16.4"
   },
   "prettier": {
