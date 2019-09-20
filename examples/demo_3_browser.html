@@ -3,7 +3,22 @@
 <head>
     <script src="browser-demo.js"></script>
     <script>
-        console.log(getDemo);
+        // @todo: add enter key
+        // @todo: add score box
+        // @todo: add layout
+        // @todo: add save/load
+        // @todo: add autoscroll
+
+        window.onload = function () {
+            var game = window.setupDemo();
+
+            document
+                .getElementById('intro')
+                .addEventListener('click', () => {
+                    game.run();
+                });
+
+        }
     </script>
 </head>
 
@@ -11,7 +26,9 @@
 
     <pre id="print-area"></pre>
 
-    <input id="cli" />
+    <input id="input-area" type="text" />
+
+    <button id="intro" type="button">OK</button>
 
 </body>
 
@@ -24,13 +41,19 @@
     #print-area {
         width: 100%;
         background-color: #fff;
-        height: 8rem;
+        height: 50%;
+        overflow-y: scroll;
     }
 
-    #cli {
-        width: 12rem;
+    #input-area {
+        width: 80%;
         height: 2rem;
         background-color: #fff;
+    }
+
+    #intro {
+        width: 2rem;
+        height: 2rem;
     }
 
 </style>

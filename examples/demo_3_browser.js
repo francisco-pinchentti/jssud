@@ -1,5 +1,3 @@
-import { CLIGame, CLIGameEngine } from '../src/cli';
-
 import { Room, InventoryItem } from '../src/base';
 
 import {
@@ -13,9 +11,10 @@ import {
 } from '../src/events';
 
 import { GameTextDictionary } from '../src/text';
+import { BrowserGame } from '../src/browser/BrowserGame';
 
 /**
- * Demo 2: i18n
+ * Demo 3: Browser
  */
 
 /**
@@ -23,7 +22,7 @@ import { GameTextDictionary } from '../src/text';
  *
  * @returns {Game} a new game object
  */
-function initializeNewGame() {
+function initializeNewGame(readElement, writeElement) {
     const events = [
         new CommandEvent(
             game => game.printArbitraryMessage('on a custom event'),
@@ -121,18 +120,21 @@ function initializeNewGame() {
 
     rooms[0].addItem(keyItem);
 
-    const g = new CLIGame(events, rooms, ['en', 'es'], 'en');
+    const g = new BrowserGame(
+        events,
+        rooms,
+        ['en', 'es'],
+        'en',
+        readElement,
+        writeElement
+    );
     g.movePlayerCharacterToRoom(rooms[0]);
 
     return g;
 }
 
-window.getDemo = () => new CLIGameEngine(initializeNewGame);
-
-window.runDemo = () => {
-    const ge = window.getDemo();
-    ge.run().then(result => {
-        console.log(`<DEBUG> Demo script exit ${result}`);
-        process.exit(0);
-    });
+window.setupDemo = () => {
+    const readElement = document.getElementById('input-area');
+    const writeElement = document.getElementById('print-area');
+    return initializeNewGame(readElement, writeElement);
 };
