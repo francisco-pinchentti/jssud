@@ -43,7 +43,7 @@ npm run build-browser-demo
 npm run serve-browser-demo
 ```
 
-visit [http://localhost:3000] to check out how it's coming
+visit http://localhost:3000 to check out how it's coming
 
 ## generating documentation
 
