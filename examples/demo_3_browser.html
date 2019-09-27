@@ -3,33 +3,73 @@
 <head>
     <script src="browser-demo.js"></script>
     <script>
-        // @todo: add enter key
-        // @todo: add score box
-        // @todo: add layout
-        // @todo: add save/load
-        // @todo: add autoscroll
+        var game;
 
-        window.onload = function () {
-            var game = window.setupDemo();
-
-            document
-                .getElementById('intro')
-                .addEventListener('click', () => {
-                    game.run();
-                });
-
+        function updateScore(newVal) {
+            document.querySelector('.score span').textContent = ("000" + newVal).slice(-4);
         }
+
+        function updateTurnCount(newVal) {
+            document.querySelector('.turns span').textContent = newVal;
+        }
+
+        function setup(fileToLoad) {
+            game = window.setupDemo();
+            
+            if (fileToLoad) {
+                game.doLoad(fileToLoad);
+                var ss = game._getStateSnapshot();
+                updateScore(ss.score);
+                updateTurnCount(ss.turn);
+            }
+
+            game.setReady();
+            game._print("Welcome to jssud browser demo");
+            game.printCurrentRoomDescription();
+
+            game.addListener('score', (newVal) => {
+                updateScore(newVal);
+            });
+
+            game.addListener('turn', (newVal) => {
+                updateTurnCount(newVal);
+            });
+
+            game.addListener('load', (filename) => {
+                setup(filename);
+            });
+        }
+
+        window.addEventListener('load', (event) => {
+            setup();
+
+            document.addEventListener("keyup", event => {
+                if (event.key !== "Enter") {
+                    return;
+                }
+                game.run();
+                event.preventDefault();
+            });
+
+            document.getElementById('intro').addEventListener('click', () => {
+                game.run();
+            });
+        });
     </script>
 </head>
 
 <body>
-
-    <pre id="print-area"></pre>
-
-    <input id="input-area" type="text" />
-
-    <button id="intro" type="button">OK</button>
-
+    <main class="game-area">
+        <aside class="stats-wrapper">
+            <p class="score"><span>0000</span> Points</p>
+            <p class="turns">Turn <span>0</span></p>
+        </aside>
+        <pre id="print-area"></pre>
+        <div class="input-wrapper">
+            <input id="input-area" type="text" />
+            <button id="intro" type="button">OK</button>
+        </div>
+    </main>
 </body>
 
 <style>
@@ -39,10 +79,12 @@
     }
 
     #print-area {
-        width: 100%;
+        width: calc(100% - 0.5rem);
         background-color: #fff;
         height: 50%;
         overflow-y: scroll;
+        padding: 0.25rem;
+        margin-top: 0.25rem;
     }
 
     #input-area {
@@ -54,6 +96,32 @@
     #intro {
         width: 2rem;
         height: 2rem;
+    }
+    
+    .input-wrapper {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .stats-wrapper {
+        background-color: #fff;
+        display: flex;
+        justify-content: space-between;
+        padding: 0.25rem;
+    }
+
+    body,
+    main,
+    section,
+    article,
+    div,
+    p,
+    aside,
+    input,
+    button,
+    pre {
+        padding: 0px;
+        margin: 0px;
     }
 
 </style>

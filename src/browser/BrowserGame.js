@@ -33,15 +33,31 @@ export class BrowserGame extends AbstractGame {
             userDefinedVariables,
             constantsDictionary
         );
+
+        /**
+         * @property <{score<Function>, turn<Function>}> _listeners
+         * @private
+         */
+        this._listeners = {
+            score: () => {},
+            turn: () => {},
+            load: () => {}
+        };
+    }
+
+    setReady() {
+        this._isRunning = true;
+        this._hideOutput = false;
     }
 
     async run() {
-        this._isRunning = true;
-        this._hideOutput = false;
-        this.printCurrentRoomSummary();
+        const oldStateSnapshot = this._getStateSnapshot();
+        this._print("\n\n");
         let _success = false;
 
         await this.readNewInput();
+
+        this._print(`> ${this.getLastInput()}`)
 
         _success = this.evalGlobalEvents();
         _success = _success || this.evalLocalEvents();
@@ -54,15 +70,54 @@ export class BrowserGame extends AbstractGame {
             );
         }
 
+        if (this._intent.load) {
+            return;
+        }
+
         this._turnCount++;
-        this.printArbitraryMessage(
-            `${this.getValueFromConstantsDictionary(
-                'onTurn'
-            ).getAsStringForGameCurrentLanguage(this)} ${this._turnCount}`
-        );
+        this._evalUpdates(oldStateSnapshot, this._getStateSnapshot());
     }
 
     async readNewInput() {
         return this.IOHandler.read();
     }
+
+    /**
+     * Adds a listener
+     *
+     * @param {BrowserGameEvent} browserGameEvent
+     * @param {Function} cb
+     */
+    addListener(browserGameEvent, cb) {
+        this._listeners[browserGameEvent] = cb;
+    }
+
+    _getStateSnapshot() {
+        return {
+            turn: this._turnCount,
+            score: this.getPlayerCharacter().getScore(),
+        };
+    }
+
+    /**
+     * Evaluates and calls any game state change listener
+     *
+     * @param {BrowserGameStateSnapshot} oldStateSnapshot
+     * @param {BrowserGameStateSnapshot} newStateSnapshot
+     */
+    _evalUpdates(oldStateSnapshot, newStateSnapshot) {
+        if (oldStateSnapshot.turn !== newStateSnapshot.turn) {
+            this._listeners.turn(newStateSnapshot.turn);
+        }
+
+        if (oldStateSnapshot.score !== newStateSnapshot.score) {
+            this._listeners.score(newStateSnapshot.score);
+        }
+    }
+
+    onLoad(filename) {
+        super.onLoad(filename);
+        this._listeners.load(filename);
+    }
+
 }

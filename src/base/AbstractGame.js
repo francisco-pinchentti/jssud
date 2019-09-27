@@ -59,7 +59,7 @@ export class AbstractGame {
         /**
          * @property {object} _intent will be used when game loop is stopped, paused, etc
          */
-        this._intent = null;
+        this._intent = {};
 
         /**
          * @property {boolean} _onFailureCbEnabled executes onFailureCb for game events on loop
@@ -70,6 +70,8 @@ export class AbstractGame {
          * @property {boolean} _hideOutput print() calls will be no-op when this flag is true
          */
         this._hideOutput = true;
+
+        this._debugMode = false;
     }
 
     run() {
@@ -160,12 +162,16 @@ export class AbstractGame {
      */
     _print(message) {
         if (!this._hideOutput) {
-            this.IOHandler.print(`<${this._id}>\t\t${message}`);
+            if (this._debugMode) {
+                this.IOHandler.print(`<${this._id}>\t\t${message}`);
+            } else {
+                this.IOHandler.print(message);
+            }
         }
     }
 
     /**
-     * Prints current room description
+     * Prints current room description for current language
      */
     printCurrentRoomSummary() {
         const currentRoom = this.getPlayerCharacter().getCurrentRoom();
@@ -175,7 +181,7 @@ export class AbstractGame {
     }
 
     /**
-     * Prints current room content
+     * Prints current room "content"
      */
     printCurrentRoomDetails() {
         const currentRoom = this.getPlayerCharacter().getCurrentRoom();
@@ -188,6 +194,15 @@ export class AbstractGame {
                 currentRoom.getItemsNamesForGameCurrentLanguage(this).join('\n')
             );
         }
+        // @todo print exits?
+    }
+
+    /**
+     * Prints a full description of the current room
+     */
+    printCurrentRoomDescription() {
+        this.printCurrentRoomSummary();
+        this.printCurrentRoomDetails();
     }
 
     /**
@@ -206,14 +221,34 @@ export class AbstractGame {
         this._print(messageDict.getAsStringForGameCurrentLanguage(this));
     }
 
+    /**
+     * Fires after QuitGameEvent
+     * @abstract
+     */
     quit() {
         throw new Error('Abstract method');
     }
 
+    /**
+     * Fires after LoadGameEvent
+     * @param {string} filename 
+     */
     onLoad(filename) {
-        throw new Error('Abstract method');
+        this._isRunning = false;
+        this._intent = Object.assign(
+            {},
+            {
+                load: true,
+                filenameToLoad: filename,
+            }
+        );
     }
 
+    /**
+     * Used to parse game data
+     * 
+     * @param {string} filename 
+     */
     doLoad(filename) {
         const data = this.IOHandler.load(filename);
         this._hideOutput = true;
@@ -233,6 +268,11 @@ export class AbstractGame {
         this.printArbitraryMessage(message);
     }
 
+    /**
+     * Persists commands in the order they were received
+     * 
+     * @param {string} filename 
+     */
     save(filename) {
         const ommitedInputs = this.getNonPersistableInputs();
         this.IOHandler.save(filename, {

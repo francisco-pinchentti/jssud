@@ -13,6 +13,7 @@ export class RoomTransitionEvent extends CommandEvent {
         super(
             game => {
                 game.movePlayerCharacterToRoom(this.destination);
+                game.printCurrentRoomDescription();
             },
             commands,
             id

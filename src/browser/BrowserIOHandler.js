@@ -23,12 +23,19 @@ export class BrowserIOHandler extends AbstractIOHandler {
         });
     }
 
+    scrollWriteElement() {
+        this._writeElement.scrollTo(0, this._writeElement.scrollHeight);
+    }
+
     /**
      *
      * @param {string} output
      */
     print(output = '') {
-        this._writeElement.textContent = this._writeElement.textContent + '\n' + output;
+        this._writeElement.textContent =
+            this._writeElement.textContent + '\n' + output;
+        // @todo consider a max scroll height to keep
+        this.scrollWriteElement();
     }
 
     clearOutputArea() {
@@ -40,7 +47,12 @@ export class BrowserIOHandler extends AbstractIOHandler {
      * @param {string} filename
      */
     load(filename) {
-        throw new Error('Not implemented');
+        try {
+            const data = localStorage.getItem(filename);
+            return JSON.parse(data);
+        } catch (e) {
+            return false;
+        }
     }
 
     /**
@@ -49,7 +61,24 @@ export class BrowserIOHandler extends AbstractIOHandler {
      * @param {object} opts
      */
     save(filename, opts) {
-        throw new Error('Not implemented');
+        if (!opts) {
+            throw new Error('Missing required argument: opts');
+        }
+
+        let inputs = this.inputs;
+        if (opts.ommitedInputs && opts.ommitedInputs.length) {
+            inputs = this.inputs.filter(
+                i => !opts.ommitedInputs.find(o => i === o)
+            );
+        }
+        const data = JSON.stringify({
+            language: opts.language,
+            turnCount: opts.turnCount,
+            gameSettings: opts.gameSettings,
+            inputs,
+        });
+
+        localStorage.setItem(filename, data);
     }
 
     onGameDestroy() {

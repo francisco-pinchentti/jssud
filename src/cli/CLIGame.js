@@ -101,14 +101,4 @@ export class CLIGame extends AbstractGame {
         );
     }
 
-    onLoad(filename) {
-        this._isRunning = false;
-        this._intent = Object.assign(
-            {},
-            {
-                load: true,
-                filenameToLoad: filename,
-            }
-        );
-    }
 }
