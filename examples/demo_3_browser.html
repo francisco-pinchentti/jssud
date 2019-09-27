@@ -5,34 +5,37 @@
     <script>
         var game;
 
-        function updateScore(newVal) {
+        function updateScoreView(newVal) {
             document.querySelector('.score span').textContent = ("000" + newVal).slice(-4);
         }
 
-        function updateTurnCount(newVal) {
+        function updateTurnCountView(newVal) {
             document.querySelector('.turns span').textContent = newVal;
         }
 
+        /**
+         * Creates a new game instance, optionally loading a given key
+         */ 
         function setup(fileToLoad) {
             game = window.setupDemo();
             
             if (fileToLoad) {
                 game.doLoad(fileToLoad);
                 var ss = game._getStateSnapshot();
-                updateScore(ss.score);
-                updateTurnCount(ss.turn);
-            }
-
-            game.setReady();
-            game._print("Welcome to jssud browser demo");
-            game.printCurrentRoomDescription();
+                updateScoreView(ss.score);
+                updateTurnCountView(ss.turn);
+            } else {
+                game.setReady();
+                game._print("Welcome to jssud browser demo");
+                game.printCurrentRoomDescription();
+            }            
 
             game.addListener('score', (newVal) => {
-                updateScore(newVal);
+                updateScoreView(newVal);
             });
 
             game.addListener('turn', (newVal) => {
-                updateTurnCount(newVal);
+                updateTurnCountView(newVal);
             });
 
             game.addListener('load', (filename) => {
@@ -68,6 +71,9 @@
         <div class="input-wrapper">
             <input id="input-area" type="text" />
             <button id="intro" type="button">OK</button>
+        </div>
+        <div class="misc-area">
+            <!-- @todo add change language dropdown -->
         </div>
     </main>
 </body>

@@ -38,7 +38,7 @@ function initializeNewGame(readElement, writeElement) {
             { en: ['score', 'ss'], es: ['puntos', 'puntaje'] },
             { en: ['your score is %1'], es: ['su puntaje es %1'] }
         ),
-        new ChangeLanguageEvent(),
+        new ChangeLanguageEvent(/^LANG=.+/),
         new LoadGameEvent({
             en: ['load', 'loadgame'],
             es: ['cargar', 'restaurar'],
