@@ -1,20 +1,30 @@
 /**
  * A class used to represent and encapsulate game elements dictionaries
  *  - it is useful for both descriptions (used to print a localized message) and available commands grouped by language
- *  - it is created with a plain js object in the form of { 'lang-code-1': string[], 'lang-code-2': string[] }
+ *  - it is created with a plain js object in the form of { 'lang-code-1': string[] | string, 'lang-code-2': string[] | string }
  *  - @todo: check if it's convenient an ES6 Set/Map implementation
  */
 export class GameTextDictionary {
     /**
      *
-     * @param {Object} [dict] a plain js object in the form of { 'lang-code-1': string[], 'lang-code-2': string[] }
+     * @param {IGameTextDictionary} dict
      */
     constructor(dict) {
-        this.dict = dict;
+        if (!dict) {
+            throw new Error('Missing argument dict');
+        }
+        this._dictionary = Object.keys(dict).reduce((acc, curr) => {
+            if (Array.isArray(dict[curr])) {
+                acc[curr] = dict[curr];
+            } else {
+                acc[curr] = [dict[curr]];
+            }
+            return acc;
+        }, {});
     }
 
     setForLanguage(lang, content) {
-        this.dict[lang] = content;
+        this._dictionary[lang] = content;
     }
 
     /**
@@ -23,7 +33,7 @@ export class GameTextDictionary {
      * @returns {Array<string>}
      */
     getForLanguage(lang) {
-        return this.dict[lang];
+        return this._dictionary[lang];
     }
 
     /**
@@ -47,8 +57,8 @@ export class GameTextDictionary {
     }
 
     getAsFlatArray() {
-        return Object.keys(this.dict).reduce(
-            (acc, k) => acc.concat(this.dict[k]),
+        return Object.keys(this._dictionary).reduce(
+            (acc, k) => acc.concat(this._dictionary[k]),
             []
         );
     }

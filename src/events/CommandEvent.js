@@ -9,9 +9,9 @@ export class CommandEvent extends GameEvent {
     /**
      *
      * @param {function} onSuccessCb
-     * @param {GameTextDictionary} commands
+     * @param {IGameTextDictionary} commands
      * @param {string} [id]
-     * @param {GameTextDictionary} [description]
+     * @param {IGameTextDictionary} [description]
      * @param {function} [onFailureCb]
      */
     constructor(onSuccessCb, commands, id, description, onFailureCb) {

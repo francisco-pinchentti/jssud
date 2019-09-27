@@ -1,0 +1,74 @@
+{
+    "rooms": [
+        {
+            "id": "r01",
+            "name": {
+                "en": "road",
+                "es": "camino"
+            },
+            "description": {
+                "en": "You stand on a road, on the outskirst of a small village. It's late during the night, but the bright from the flames over farms and rooftops allows you to see...",
+                "es": "Te encuentras en un camino a las afueras de un pequeño pueblo. Es tarde, no obstante el brillo de las llamas ardiendo en las granjas y azoteas te permite ver..."
+            },
+            "transitions": [
+                {
+                    "destination": "r02",
+                    "commands": {
+                        "en": [
+                            "go north",
+                            "north",
+                            "n"
+                        ],
+                        "es": [
+                            "norte",
+                            "n",
+                            "ir al norte"
+                        ]
+                    }
+                }
+            ],
+            "items": [
+                {
+                    "id": "i01",
+                    "name": {
+                        "en": "dagger",
+                        "es": "daga"
+                    },
+                    "description": {
+                        "en": "",
+                        "es": ""
+                    },
+                    "points": 1
+                }
+            ]
+        },
+        {
+            "id": "r02",
+            "name": {
+                "en": "town gate",
+                "es": "puertas del pueblo"
+            },
+            "description": {
+                "en": "PLACEHOLDER EN",
+                "es": "PLACEHOLDER ES"
+            },
+            "transitions": [
+                {
+                    "destination": "r01",
+                    "commands": {
+                        "en": [
+                            "go south",
+                            "south",
+                            "s"
+                        ],
+                        "es": [
+                            "sur",
+                            "s",
+                            "ir al sur"
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

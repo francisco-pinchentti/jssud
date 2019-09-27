@@ -100,5 +100,4 @@ export class CLIGame extends AbstractGame {
             }
         );
     }
-
 }

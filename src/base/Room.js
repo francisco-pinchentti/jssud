@@ -1,12 +1,13 @@
 import { GameObject } from './GameObject';
 import { PickUpItemEvent, RoomTransitionEvent } from '../events';
+import { GameTextDictionary } from '../text/GameTextDictionary';
 
 /**
  * A single game room
  * - Normally a game consist of (among other stuff) a collection of rooms that the player character may visit
  */
 export class Room extends GameObject {
-    constructor(items = [], events = [], id, description) {
+    constructor(items = [], events = [], id, description, name) {
         super(id, description);
 
         /**
@@ -28,6 +29,8 @@ export class Room extends GameObject {
          * @property {Array<Room>} destinations
          */
         this.destinations = [];
+
+        this.name = name ? new GameTextDictionary(name) : null;
     }
 
     addEvent(evt) {
@@ -59,8 +62,8 @@ export class Room extends GameObject {
      * Connects the receiver room object with a given room, allowing the player to move from receiver to destination
      *
      * @param {Room} destinationRoom
-     * @param {object} commands
-     * @param {string} [id]
+     * @param {IGameTextDictionary} commands
+     * @param {string} [id] identifier for the transition event that will be created
      */
     addDestination(destinationRoom, commands, id) {
         this.destinations.push(destinationRoom);

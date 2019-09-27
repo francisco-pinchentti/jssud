@@ -231,7 +231,7 @@ export class AbstractGame {
 
     /**
      * Fires after LoadGameEvent
-     * @param {string} filename 
+     * @param {string} filename
      */
     onLoad(filename) {
         this._isRunning = false;
@@ -246,8 +246,8 @@ export class AbstractGame {
 
     /**
      * Used to parse game data
-     * 
-     * @param {string} filename 
+     *
+     * @param {string} filename
      */
     doLoad(filename) {
         const data = this.IOHandler.load(filename);
@@ -270,8 +270,8 @@ export class AbstractGame {
 
     /**
      * Persists commands in the order they were received
-     * 
-     * @param {string} filename 
+     *
+     * @param {string} filename
      */
     save(filename) {
         const ommitedInputs = this.getNonPersistableInputs();

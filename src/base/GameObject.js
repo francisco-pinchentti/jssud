@@ -7,7 +7,9 @@ import { GameTextDictionary } from '../text/GameTextDictionary';
 export class GameObject {
     constructor(id, description) {
         this.id = id;
-        this.description = new GameTextDictionary(description);
+        this.description = description
+            ? new GameTextDictionary(description)
+            : null;
     }
 
     getId() {

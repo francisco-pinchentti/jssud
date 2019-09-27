@@ -41,7 +41,7 @@ export class BrowserGame extends AbstractGame {
         this._listeners = {
             score: () => {},
             turn: () => {},
-            load: () => {}
+            load: () => {},
         };
     }
 
@@ -52,12 +52,12 @@ export class BrowserGame extends AbstractGame {
 
     async run() {
         const oldStateSnapshot = this._getStateSnapshot();
-        this._print("\n\n");
+        this._print('\n\n');
         let _success = false;
 
         await this.readNewInput();
 
-        this._print(`> ${this.getLastInput()}`)
+        this._print(`> ${this.getLastInput()}`);
 
         _success = this.evalGlobalEvents();
         _success = _success || this.evalLocalEvents();
@@ -119,5 +119,4 @@ export class BrowserGame extends AbstractGame {
         super.onLoad(filename);
         this._listeners.load(filename);
     }
-
 }

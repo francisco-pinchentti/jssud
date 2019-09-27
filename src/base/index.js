@@ -6,3 +6,4 @@ export { InventoryItem } from './InventoryItem';
 export { PlayerCharacter } from './PlayerCharacter';
 export { PlayerInventory } from './PlayerInventory';
 export { Room } from './Room';
+export { parseJSONDatafile } from './datafile-parse-utils';

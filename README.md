@@ -21,7 +21,6 @@ It's partly inspired on a previous framework I used to work (now it's pretty muc
 
 If you want to check the old python project, it's here [pysud]
 
-
 ## running examples
 
 ### CLI games
